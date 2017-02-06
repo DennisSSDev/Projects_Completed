@@ -8,6 +8,7 @@ namespace ICE_4_practice_for_myself
 {
     class Program
     {
+        Target ac;
         static void Main(string[] args)
         {
             Target newCharacter = new Target("Jhon", 99);
@@ -18,7 +19,7 @@ namespace ICE_4_practice_for_myself
             }
             catch(HealthOutOfRangeException ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message + newCharacter.Name);
             }
         }
     }
