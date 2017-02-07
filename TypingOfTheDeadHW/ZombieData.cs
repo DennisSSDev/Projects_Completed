@@ -11,7 +11,6 @@ namespace TypingOfTheDeadHW
     {
         private List<string> zombies;
         private List<string> phrases;
-
         public ZombieData(List<string> pZombies, List<string> pPhrases)
         {
             zombies = pZombies;
@@ -42,17 +41,20 @@ namespace TypingOfTheDeadHW
    
             try
             {
-                DirectoryInfo ForZombies = new DirectoryInfo("ForZombies");
+
 
 
                 //DirectoryInfo newDirect = new DirectoryInfo(@"c:\");//ask the professor if valid
-                
-            
-                FileInfo[] allZombieFiles = ForZombies.GetFiles("zombie1.txt");//Problem Here
-                for(int i = 0; i<allZombieFiles.Count<FileInfo>(); i++)
+                string[] zombieFiles = Directory.GetFiles(@"ForZombies", "zombie*");
+                foreach (var item in zombieFiles)
                 {
-                    zombies.Add(allZombieFiles[i].OpenRead());
+                    StreamReader zombieReader = new StreamReader(item);
+                    zombies.Add(zombieReader.ReadToEnd());
                 }
+            
+                 //Problem Here
+
+
                 //foreach(var item in allZombieFiles)
                 //{
                     
@@ -77,7 +79,7 @@ namespace TypingOfTheDeadHW
             Random newCountOfRandom2 = new Random();
             int countForStringsInZombies = zombies.Count;
             int foundNum = newCountOfRandom2.Next(0, countForStringsInZombies);
-            return zombies[0];
+            return zombies[foundNum];
         }
     }
 }

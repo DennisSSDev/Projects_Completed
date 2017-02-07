@@ -10,14 +10,6 @@ namespace TypingOfTheDeadHW
     {
         static void Main(string[] args)
         {
-            ZombieData newData = new ZombieData(new List<string>(), new List<string>());
-
-            newData.LoadPhrases("phrases.txt");
-            newData.LoadZombies();
-            Console.WriteLine(newData.RandomPhrase());
-            Console.WriteLine(newData.RandomZombie());
-
-
         }
     }
 }
