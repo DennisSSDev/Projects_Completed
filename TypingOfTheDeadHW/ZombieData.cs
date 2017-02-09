@@ -36,31 +36,16 @@ namespace TypingOfTheDeadHW
         }
         public void LoadZombies()
         {
-            string zName = "zombie1";
-
-   
             try
             {
-
-
-
                 //DirectoryInfo newDirect = new DirectoryInfo(@"c:\");//ask the professor if valid
                 string[] zombieFiles = Directory.GetFiles(@"ForZombies", "zombie*");
                 foreach (var item in zombieFiles)
                 {
                     StreamReader zombieReader = new StreamReader(item);
                     zombies.Add(zombieReader.ReadToEnd());
+                    zombieReader.Close();
                 }
-            
-                 //Problem Here
-
-
-                //foreach(var item in allZombieFiles)
-                //{
-                    
-                    //zombies.Add(item.OpenText().ToString());//ask if this method closes itself
-                //}
-
             }
             catch (Exception ex)
             {
