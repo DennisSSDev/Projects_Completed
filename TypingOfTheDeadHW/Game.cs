@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Timers;
 
 namespace TypingOfTheDeadHW
 {
@@ -13,16 +14,16 @@ namespace TypingOfTheDeadHW
         private int highScore;
         private int zombieTimer;
         private int letterIndex;
-        //private List<string> initPhrases;
-        //private List<string> initZombies;
+        private ZombieData zombieAttribute;
 
-        public Game(int pLives, int hScore, int zTimer, int lIndex)//set lives to five later
-            :base(new List<string>() , new List<string>())
+        public Game()
+            :base(new List<string>(), new List<string>()) //Is this acceptable for initialization?
         {
-            this.playerLives = pLives;
-            this.highScore = hScore;
-            this.zombieTimer = zTimer;
-            this.letterIndex = lIndex;
+            this.playerLives = 5;
+            this.highScore = 0;
+            this.zombieTimer = 0;
+            this.letterIndex = 0;
+            zombieAttribute = new ZombieData(new List<string>(), new List<string>());
             try
             {
                 LoadPhrases("phrases.txt");
@@ -41,6 +42,7 @@ namespace TypingOfTheDeadHW
             string phrase = "";
             while (playerLives > 0)
             {
+                
                 //find a way to check if there is a zombie alive
                 if (zombieHolder == "")
                 {
@@ -74,24 +76,24 @@ namespace TypingOfTheDeadHW
                         zombieTimer = 0;
                         break;
                     }
-                    System.Threading.Thread.Sleep(100);//How to make thios timer work?????
-                    {
-                        zombieTimer+=1;
-                    }
-                    if (zombieTimer >= 10)
+
+                     zombieTimer += 1;//How to make this timer work?????
+
+                    if (zombieTimer >= 10 && letterIndex != phrase.Length)
                     {
 
 
                         //how to make the Console.KeyAvailable false? and how to count time with zombie timer
-                            playerLives--;
-                            Console.WriteLine("\nYou got hit you now have " + playerLives + " lives\n");
-                            zombieTimer = 0;
-                            System.Threading.Thread.Sleep(50);
-                            {
-                                zombieTimer += 1;
-                            }
+                        playerLives--;
+                        Console.WriteLine("\nYou got hit you now have " + playerLives + " lives\n");
+                        zombieTimer = 0;
+                        System.Threading.Thread.Sleep(50);
+                        {
+                            zombieTimer += 1;
+                        }
                     }
-                    
+
+                 
                 }
 
                 
