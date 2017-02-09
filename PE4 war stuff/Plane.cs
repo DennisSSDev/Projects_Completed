@@ -17,7 +17,7 @@ namespace PE4_war_stuff
 
         public override string ToString()
         {
-            return Name + " " + Country + " " + TurnMode + " " + AttackMode + " " + Cost + " " + MaxDamage;
+            return "\nName: " + Name + "\nCountry: " + Country + "\nTurn Mode: " + TurnMode + "\nAttack Mode: " + AttackMode + "\nCost: " + Cost + "\nMax Damage: " + MaxDamage + "\n";
         }
     }
 }
