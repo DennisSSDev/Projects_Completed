@@ -10,7 +10,7 @@ namespace TypingOfTheDeadHW
     {
         static void Main(string[] args)
         {
-            Game newGame = new Game();//Do you have to initialize the entire thing? together with health and stuff????
+            Game newGame = new Game();
             newGame.PlayGame();
         }
     }

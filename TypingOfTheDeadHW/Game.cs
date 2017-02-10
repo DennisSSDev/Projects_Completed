@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Timers;
 
 namespace TypingOfTheDeadHW
 {
@@ -23,9 +22,10 @@ namespace TypingOfTheDeadHW
             this.highScore = 0;
             this.zombieTimer = 0;
             this.letterIndex = 0;
-            zombieAttribute = new ZombieData(new List<string>(), new List<string>());
+            
             try
             {
+                zombieAttribute = new ZombieData(new List<string>(), new List<string>());
                 LoadPhrases("phrases.txt");
                 LoadZombies();
             }
@@ -35,14 +35,39 @@ namespace TypingOfTheDeadHW
                 Environment.Exit(0);
             } 
         }
+        public void saveHS()
+        {
+            String[] getBat = Directory.GetFiles(@"ForZombies", "HighScore*");
+            if(getBat.Length == 0)
+            {
+                using(var writer = File.OpenWrite("HighScore.dat"))
+                {
+                    var highscoreSaver = new BinaryWriter(writer);
+                    highscoreSaver.Write(highScore);
+                }
+            }
+            else
+            {
+                var intStream = File.OpenRead("HighScore.dat");
+                var reader = new BinaryReader(intStream);
+                if(reader.ReadInt32() < highScore)
+                {
+                    using (var writer = File.OpenWrite("HighScore.dat"))
+                    {
+                        var highscoreSaver = new BinaryWriter(writer);
+                        highscoreSaver.Write(highScore);
+                    }
+                }
+            }
+        }
 
         public void PlayGame()
         {
             string zombieHolder = "";
             string phrase = "";
+            int i = 0;
             while (playerLives > 0)
             {
-                
                 //find a way to check if there is a zombie alive
                 if (zombieHolder == "")
                 {
@@ -50,8 +75,8 @@ namespace TypingOfTheDeadHW
                     phrase = RandomPhrase();
                     zombieTimer = 0;
                     letterIndex = 0;
-                    Console.WriteLine("\nYour Highscore: " + highScore + "\n\n\n" +
-                    zombieHolder + "\n\n" + phrase);
+                    Console.WriteLine("\nYour Highscore: " + highScore + "\n" +
+                    zombieHolder + "\n" + phrase);
                 }
                 while (Console.KeyAvailable)
                 {
@@ -74,31 +99,31 @@ namespace TypingOfTheDeadHW
                         zombieHolder = "";
                         highScore += 10;
                         zombieTimer = 0;
-                        break;
-                    }
-
-                     zombieTimer += 1;//How to make this timer work?????
-
-                    if (zombieTimer >= 10 && letterIndex != phrase.Length)
-                    {
-
-
-                        //how to make the Console.KeyAvailable false? and how to count time with zombie timer
-                        playerLives--;
-                        Console.WriteLine("\nYou got hit you now have " + playerLives + " lives\n");
-                        zombieTimer = 0;
-                        System.Threading.Thread.Sleep(50);
-                        {
-                            zombieTimer += 1;
-                        }
+                        i += 10;
                     }
 
                  
                 }
+                System.Threading.Thread.Sleep(50);
+                zombieTimer += 1;//How to make this timer work?????
 
-                
+                if (zombieTimer == 200-i && letterIndex != phrase.Length)
+                {
+
+                    letterIndex = 0;
+                    //how to make the Console.KeyAvailable false? and how to count time with zombie timer
+                    playerLives--;
+                    Console.WriteLine("\nYou got hit you now have " + playerLives + " lives\n");
+                    
+                    zombieTimer = 0;
+                    //everything with an empty circle after second while loop 
+                     //You can do the same phrase 
+                }
+
+
             }
             Console.WriteLine("You lost, thank you for playing your highscore is: " + highScore);
+            saveHS();
         }
         
     }
