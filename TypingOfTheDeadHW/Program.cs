@@ -10,7 +10,7 @@ namespace TypingOfTheDeadHW
     {
         static void Main(string[] args)
         {
-            Game newGame = new Game();
+            Game newGame = new Game();//simply creating the game oblect to be able to launch the play game method
             newGame.PlayGame();
         }
     }
