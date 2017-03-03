@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using System;
 namespace Collisions
 {
     enum WalkingState
@@ -20,12 +20,11 @@ namespace Collisions
         Texture2D sony;
         WalkingState newState;
         KeyboardState keyboard;
-        Rectangle positionForN = new Rectangle(100, 100, 100, 200);
-        Rectangle positionForS;
-        Vector2 newVector;
+        Rectangle positionForN = new Rectangle(100, 100, 50, 100);
         Ship newChar;
         List<Rectangle> listOfRectangles;
-
+        Random newObj = new Random();
+        int t = 1;
 
 
         public Game1()
@@ -44,7 +43,10 @@ namespace Collisions
         {
             // TODO: Add your initialization logic here
             listOfRectangles = new List<Rectangle>();
-            listOfRectangles.Add(new Rectangle(GraphicsDevice.Viewport.Width - 100, GraphicsDevice.Viewport.Height - 100, 100, 50));
+            for(int i = 0; i <5 ; i++)
+            {
+                listOfRectangles.Add(new Rectangle(newObj.Next(50, 500), newObj.Next(50, 50), 100, 70));
+            }
             base.Initialize();
         }
 
@@ -58,7 +60,7 @@ namespace Collisions
             spriteBatch = new SpriteBatch(GraphicsDevice);
             nathan = Content.Load<Texture2D>("Nathan");
             sony = Content.Load<Texture2D>("Sony");
-            newChar = new Ship(nathan, positionForN, newVector);
+            newChar = new Ship(nathan, positionForN, new Vector2(0f, 0f));
         }
 
         /// <summary>
@@ -85,15 +87,83 @@ namespace Collisions
             {
                 newState = WalkingState.Left;
                 Rectangle temp = new Rectangle();
-                
-                temp.X = newChar.ISpace.X;
-                temp.Y = newChar.ISpace.Y;
-                temp.Height = newChar.ISpace.Height;
-                temp.Width = newChar.ISpace.Width;
-                temp.X -= 1;
-                temp.Y -= 1;
+                temp = newChar.ISpace;
+                temp.X -= 5;
                 newChar.ISpace = temp;
+            }
+            else if (keyboard.IsKeyDown(Keys.Right))
+            {
+                newState = WalkingState.Right;
+                Rectangle temp = new Rectangle();
+                temp = newChar.ISpace;
+                temp.X += 10;
+                newChar.ISpace = temp;
+            }
+            else if (keyboard.IsKeyDown(Keys.Up))
+            {
+                newState = WalkingState.Up;
+                Rectangle temp = new Rectangle();
+                temp = newChar.ISpace;
+                temp.Y -= 10;
+                newChar.ISpace = temp;
+            }
+            else if (keyboard.IsKeyDown(Keys.Down))
+            {
+                newState = WalkingState.Down;
+                Rectangle temp = new Rectangle();
+                temp = newChar.ISpace;
+                temp.Y += 10;
+                newChar.ISpace = temp;
+            }
+            
+            for (int i = 0; i < listOfRectangles.Count; i++)
+            {
+                for (int a = listOfRectangles.Count-1; a >= 0; a--)
+                {
+                    if(i == a)
+                    {
+                        continue;
+                    }
+                    else if (listOfRectangles[i].Intersects(listOfRectangles[a]))
+                    {
+                        Rectangle temp = listOfRectangles[i];
+                        temp.Y = newObj.Next(newObj.Next(50,500));
+                        temp.X = newObj.Next(newObj.Next(50, 500));
+                        listOfRectangles[i] = temp;
+                    }
+                }
+            }
+            for (int i = 0; i < listOfRectangles.Count; i++)
+            {
+                Rectangle temp = listOfRectangles[i];
+                temp.X -= t;
 
+                if (GraphicsDevice.Viewport.Bounds.Left == listOfRectangles[i].X)
+                {
+                    t = -1;
+                }
+                else if(GraphicsDevice.Viewport.Bounds.Right == listOfRectangles[i].X)
+                {
+                    t = 1;
+                }
+                listOfRectangles[i] = temp;
+            }
+
+            if (GraphicsDevice.Viewport.Bounds.Left == newChar.ISpace.X + 20)
+            {
+                Rectangle temp = newChar.ISpace;
+
+                temp.Offset(795f, 0);
+
+                newChar.ISpace = temp;
+            }
+            if (GraphicsDevice.Viewport.Bounds.Right < newChar.ISpace.X)
+            {
+                Rectangle temp = newChar.ISpace;
+
+                temp.Offset(-795f, 0);
+
+                newChar.ISpace = temp;
             }
 
 
@@ -110,9 +180,20 @@ namespace Collisions
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-
             spriteBatch.Draw(newChar.Image,newChar.ISpace, Color.White);
-            spriteBatch.Draw(sony, listOfRectangles[0], Color.White);
+
+            for (int a = 0; a < listOfRectangles.Count; a++)
+            {
+                if (newChar.ISpace.Intersects(listOfRectangles[a]))
+                {
+                    spriteBatch.Draw(newChar.Image, newChar.ISpace, Color.Red);
+                }
+            }
+            for (int i = 0; i < listOfRectangles.Count; i++)
+            {
+                spriteBatch.Draw(sony, listOfRectangles[i], Color.White);
+
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
