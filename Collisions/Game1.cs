@@ -43,7 +43,7 @@ namespace Collisions
         {
             // TODO: Add your initialization logic here
             listOfRectangles = new List<Rectangle>();
-            for(int i = 0; i <5 ; i++)
+            for(int i = 0; i <6 ; i++)
             {
                 listOfRectangles.Add(new Rectangle(newObj.Next(50, 500), newObj.Next(50, 50), 100, 70));
             }
