@@ -29,7 +29,7 @@ namespace HWnumber2
 
         public virtual void Draw(SpriteBatch obj)
         {
-            obj.Draw(curTexture, position, Color.Black);
+            obj.Draw(curTexture, position, Color.White);
         }
     }
 }

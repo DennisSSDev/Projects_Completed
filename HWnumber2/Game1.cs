@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using System;
 namespace HWnumber2
 {
     enum GameState
@@ -16,12 +16,62 @@ namespace HWnumber2
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
-        Texture2D someTexture1;
-        Texture2D someTexture2;
+        
         Player mainCharacter;
         List<Collectible> listOfCollectibles;
 
+        Texture2D playerTex;
+        Texture2D collTex;
+        int level = 1;
+        double timer = 0;
+        KeyboardState kbState;
+        KeyboardState previousKbState;
+        int adder = 0;
+        Random giveRandom = new Random();
         GameState curState;
+        public void NextLevel()
+        {
+            level++;
+            timer = 10;//logic won't work, find out how to make this a working timer in RL
+            adder = (int)Math.Round(level * 1.5);
+            mainCharacter.LevelScore = 0;
+            mainCharacter.X = GraphicsDevice.Viewport.Width / 2;
+            mainCharacter.Y = GraphicsDevice.Viewport.Height / 2;
+            listOfCollectibles.Clear();
+            for(int i = 0; i < 4 + adder; i++)
+            {
+                listOfCollectibles.Add(new Collectible(giveRandom.Next(5,GraphicsDevice.Viewport.Width-10),
+                    giveRandom.Next(5,GraphicsDevice.Viewport.Height-10), 
+                    20,20));
+                listOfCollectibles[i].CurTexture = collTex;
+            }
+        }
+        public void ResetGame()
+        {
+            level = 0;
+            mainCharacter.TotalScore = 0;
+            NextLevel();
+        }
+        public void ScreenWrap()
+        {
+            if (mainCharacter.Position.X > GraphicsDevice.Viewport.Width)//Might not work since checking for screen width
+            {
+                mainCharacter.X = 0;
+            }
+            else if (mainCharacter.Position.X < -2)
+            {
+                mainCharacter.X = GraphicsDevice.Viewport.Width;
+            }
+
+            if (mainCharacter.Position.Y > GraphicsDevice.Viewport.Height)
+            {
+                mainCharacter.Y = 0;
+            }
+            else if(mainCharacter.Position.Y < -1)
+            {
+                mainCharacter.Y = GraphicsDevice.Viewport.Height;
+            } 
+        }
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
