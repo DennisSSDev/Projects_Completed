@@ -25,7 +25,7 @@ namespace HWnumber2
         int level = 1;
         double timer = 0;
         KeyboardState kbState;
-        KeyboardState previousKbState;
+        KeyboardState previousKbState = Keyboard.GetState();
         int adder = 0;
         Random giveRandom = new Random();
         GameState curState;
@@ -72,6 +72,21 @@ namespace HWnumber2
                 mainCharacter.Y = GraphicsDevice.Viewport.Height;
             } 
         }
+
+        public bool SingleKeyPress(Keys someKey)//there has to be a key parameter
+        {
+            previousKbState = kbState;//might not be needed check during debug
+            kbState = Keyboard.GetState();
+          
+            if(kbState.IsKeyDown(someKey) && previousKbState.IsKeyUp(someKey))
+            {  
+                return true;    
+            }
+            else
+            {
+                return false;
+            }
+        }
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -86,8 +101,9 @@ namespace HWnumber2
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            mainCharacter = new Player(10, 10, 50, 50);
+            listOfCollectibles = new List<Collectible>();
+            curState = GameState.Menu;
             base.Initialize();
         }
 
@@ -99,8 +115,13 @@ namespace HWnumber2
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteFont = Content.Load<SpriteFont>("spriteFont");
+            playerTex = Content.Load<Texture2D>("Sanic");
+            collTex = Content.Load<Texture2D>("heart");
+            mainCharacter.CurTexture = playerTex;
 
-            // TODO: use this.Content to load your game content here
+
+            
         }
 
         /// <summary>
@@ -121,8 +142,35 @@ namespace HWnumber2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            switch (curState)
+            {
+                case GameState.Menu:
+                    if (SingleKeyPress(Keys.Enter))
+                    {
+                        curState = GameState.Game;
+                        ResetGame();
+                    }
+                    break;
+                case GameState.Game:
+                    previousKbState = kbState;//might not be needed check during debug
+                    kbState = Keyboard.GetState();
+                    if(gameTime.ElapsedGameTime.TotalSeconds == 1)
+                    {
+                        timer--;
+                    }
+                    break;
+                case GameState.GameOver:
+                    break;
+                default:
+                    break;
+            }
+
+
+
+
+
             base.Update(gameTime);
-            curState = GameState.Menu;
+            
         }
 
         /// <summary>
@@ -132,7 +180,39 @@ namespace HWnumber2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
+            switch (curState)
+            {
+                case GameState.Menu:
+                    spriteBatch.DrawString(spriteFont, "Sanic Hearts", new Vector2(200, 200), Color.Black);
+                    spriteBatch.DrawString(spriteFont, "Press Enter to Play", new Vector2(200, 250), Color.Black);
+                    break;
+                case GameState.Game:
+                    spriteBatch.Draw(mainCharacter.CurTexture, mainCharacter.Position, Color.White);
+                    for(int i = 0; i<listOfCollectibles.Count; i++)
+                    {
+                        spriteBatch.Draw(listOfCollectibles[i].CurTexture, listOfCollectibles[i].Position, Color.White);
+                    }
+                    spriteBatch.DrawString(spriteFont, ("Level: " + String.Format("{0:0.00}", level)),
+                        new Vector2(500, 50), Color.Black);
+                    spriteBatch.DrawString(spriteFont, ("Time: " + String.Format("{0:0.00}", timer)),
+                        new Vector2(500, 90), Color.Black);
+                    break;
+                case GameState.GameOver:
+                    spriteBatch.DrawString(spriteFont, "Game Over", new Vector2(400, 400), Color.Black);
+                    spriteBatch.DrawString(spriteFont, ("Level reached: " + String.Format("{0:0.00}", level)),
+                        new Vector2(400, 460), Color.Black);
+                    spriteBatch.DrawString(spriteFont, ("Score: " + String.Format("{0:0.00}", timer )),
+                        new Vector2(400, 520), Color.Black);
+                    spriteBatch.DrawString(spriteFont, "Press something to return to menu", new Vector2(400, 580), Color.Black);
+                    break;//Don't forget to put actual score once done with update method
+                default:
+                    break;
+            }
 
+
+
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
