@@ -6,17 +6,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace HWnumber2
+namespace WorkingHW2
 {
     class Collectible : GameObject
     {
-        private bool activeView = true;
+        private bool activeView = true;//bool that determines if the collectible is visible or not 
         public bool ActiveView { get { return activeView; } set { activeView = value; } }
-        public Collectible(int x, int y, int height, int width, bool activeView = true) : base(x, y, height, width)
+        public Collectible(int x, int y, int height, int width, bool activeView = true) : base(x, y, height, width)//constructor that inherits from GameObject
         {
             this.activeView = activeView;
         }
-        public bool CheckCollision(GameObject obj)
+        public bool CheckCollision(GameObject obj)//Collision checker that returns true if the object collides with a game object 
         {
             if (activeView)
             {
@@ -34,7 +34,7 @@ namespace HWnumber2
                 return false;
             }
         }
-        public override void Draw(SpriteBatch obj)
+        public override void Draw(SpriteBatch obj)//Draw method that will only draw the collectible if it's active 
         {
             if (activeView)
             {
