@@ -28,7 +28,7 @@ namespace More_with_Threading
             });
             Thread t3 = new Thread(() =>
             {
-                lock (obj)
+                lock (locker)
                 {
 
 
@@ -41,7 +41,10 @@ namespace More_with_Threading
             });
             t2.Start();
             t3.Start();
-
+            Cheese newCheese = new Cheese() { Name = "SomeCheese", Age = 220000, Firmness = 11 };
+            Thread t4 = new Thread(newCheese.CheeseMessingAround);
+            t4.Start(newCheese.Firmness);
+            t4.Join();
         }
     }
 }

@@ -27,5 +27,23 @@ namespace More_with_Threading
                 throw;
             }
         }
+        public void CheeseMessingAround(object Firmness)
+        {
+            if(Firmness == null)
+            {
+                return;
+            }
+            else
+            {
+                if((int)Firmness < 10)
+                {
+                    Console.WriteLine("That's some weak cheese you got there");
+                }
+                else
+                {
+                    Console.WriteLine("Nice Firmness");
+                }
+            }
+        }
     }
 }

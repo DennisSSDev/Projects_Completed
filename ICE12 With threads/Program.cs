@@ -17,7 +17,10 @@ namespace ICE12_With_threads
             newArray[0] = new Thread(newBorn1.Whine);
             newArray[1] = new Thread(newBorn2.Whine);
             newArray[2] = new Thread(newBorn3.Whine);
-
+            for(int i = 0; i < 3; i++)
+            {
+                newArray[i].Name = "thread" + i;
+            }
             for (int i = 0; i < newArray.Length; i++)
             {
                 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Threading;
 namespace Console_Stuff_Before_Exam
 {
     class InvaderZim
@@ -28,6 +28,29 @@ namespace Console_Stuff_Before_Exam
                 }
                 int damage = newRandom.Next((int)min,10);
                 Console.WriteLine("you took: " + damage + " damage" );
+                if(Thread.CurrentThread.Name == "Adam")
+                {
+                    Console.WriteLine("Since you're adam you'll sleep for a year");
+                    for(int i = 0; i < 10000000; i++)
+                    {
+                        try
+                        {
+                            
+                            if (Thread.CurrentThread.ThreadState == ThreadState.WaitSleepJoin)
+                            {
+                                Console.WriteLine(i);
+                            }
+                           
+                            
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("interrupted");
+                            i = 1000000000;
+                        }
+                    }
+                    
+                }
                 TakeDMG(damage);
             }
         }

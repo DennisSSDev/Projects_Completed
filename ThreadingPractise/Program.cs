@@ -18,7 +18,7 @@ namespace ThreadingPractise
                 Number a = new Number(i);
                 Thread b = new Thread(a.Print);
                 newThreadArray[i] = b;
-                b.Start();
+                newThreadArray[i].Start();
             }
             
 
