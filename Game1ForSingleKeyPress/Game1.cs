@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-namespace ICE_for_Recursion
+
+namespace Game1ForSingleKeyPress
 {
     /// <summary>
     /// This is the main type for your game.
@@ -11,8 +11,7 @@ namespace ICE_for_Recursion
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D memeHold;
-        SpriteFont counter;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -40,8 +39,7 @@ namespace ICE_for_Recursion
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            memeHold = Content.Load<Texture2D>("Meme");
-            counter = Content.Load<SpriteFont>("Count");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -73,48 +71,10 @@ namespace ICE_for_Recursion
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        /// 
-        public int DrawNeatRecursiveThing(int x, int y, int width, int height, Color color)
-        {
-            int count = 1;
-            spriteBatch.Draw(memeHold, new Rectangle(x, y, width, height), color);
-            Random someRandom = new Random();
-            int randomizer = someRandom.Next(1, 4);
-            switch (randomizer)
-            {
-                case 1:
-                    color = Color.White;
-                    break;
-                case 2:
-                    color = Color.Red;
-                    break;
-                case 3:
-                    color = Color.RoyalBlue;
-                    break;
-                default:
-                    color = Color.White;
-                    break;
-            }
-            if (width > 10 && height > 10)
-            {
-                
-                count += DrawNeatRecursiveThing(x, y, width/2, height/2, color);
-                count += DrawNeatRecursiveThing(width+GraphicsDevice.Viewport.Width/ 2, height+GraphicsDevice.Viewport.Height/ 2, width/2, height/2, color);
-                
-            }
-
-            return count;
-
-            
-
-        }
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
-            
-            spriteBatch.DrawString(counter, String.Format("{0:0}", DrawNeatRecursiveThing(0, 0, 500, 500, Color.White)), new Vector2(750, 10), Color.White);
-            spriteBatch.End();
+
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
