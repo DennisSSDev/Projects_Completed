@@ -40,16 +40,20 @@ namespace LinkedList_ICE
         {
             int loopToFindLink = 0;
             Node curHead = Head;
-            while(loopToFindLink <= index)
+            if(index < 0)
             {
-                if (curHead.Link != null)
+                return null;
+            }
+            while(curHead.Link != null)
+            {
+                if (loopToFindLink == index)
                 {
-                    return null;
+                    return curHead.Data;
                 }
                 curHead = curHead.Link;
                 loopToFindLink++;
             }
-            return curHead.Data;
+            return null;
         }
 
         /// <summary>
@@ -76,20 +80,33 @@ namespace LinkedList_ICE
         public void Insert(int index, string dataInsert)
         {
             Node curHead = Head;
+            Node newNode = new Node(dataInsert);
             try
             {
+                if (index < 0)
+                {
+                    throw new Exception();
+                }
               
                 int count = 0;
-                while(count <= index)//work on this 
+                while(curHead.Link != null)//work on this 
                 {
                     
                     if(count == index)
                     {
-                        curHead.Data = dataInsert;
+                        Node someNode = curHead.Link;
+                        curHead.Link = newNode;
+                        newNode.Link = someNode;
+                        
                     }
                     curHead = curHead.Link;
                     count++;
                 }
+                if (count < index)
+                {
+                    throw new Exception();
+                }
+
             }
             catch (Exception)
             {

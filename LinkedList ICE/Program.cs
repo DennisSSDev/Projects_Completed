@@ -16,11 +16,10 @@ namespace LinkedList_ICE
             villans.Add("Mr Freeze");
             villans.Add("catwoman");
             villans.Add("Poison Ivy");
-
-
-
+            villans.Insert(0, "Mr.Strange");
             villans.Traverse();
 
+            Console.WriteLine("\n" + villans.GetData(1));
         }
     }
 }
