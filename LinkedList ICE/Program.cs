@@ -20,6 +20,15 @@ namespace LinkedList_ICE
             villans.Traverse();
 
             Console.WriteLine("\n" + villans.GetData(1));
+
+            LinkedList classList = new LinkedList();
+            classList.InsertSorted("Dennis");
+            classList.InsertSorted("Anthony");
+            classList.InsertSorted("Michael");
+            classList.InsertSorted("Alessandro");
+            classList.InsertSorted("Tadeo");
+            classList.InsertSorted("Kat");
+            classList.Traverse();
         }
     }
 }

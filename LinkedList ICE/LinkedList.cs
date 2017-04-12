@@ -9,7 +9,7 @@ namespace LinkedList_ICE
     class LinkedList
     {
         //put a node property at the head of the list 
-
+        public int Count { get; set; }
         public Node Head { get; set; }
         /// <summary>
         /// 
@@ -114,21 +114,39 @@ namespace LinkedList_ICE
                 throw;
             }
         }
-       /* public void InsertSorted(string data)
+        public void InsertSorted(string data)
         {
+            
             Node newNode = new Node(data);
+            Node curHead = Head;
             if (Head == null)
             {
                 Head = newNode;
+                Count++;
                 return;
             }
-            Node cur = Head;
-            while (cur != null)
+            else if(Head != null)
             {
-                if()
-                cur = cur.Link;
+                while (Head != null)
+                {
+                    if (newNode.Data.CompareTo(Head.Data) <= 0)
+                    {
+                        Node someNode = Head;
+                        Head = newNode;
+                        Head.Link = someNode;
+                        return;
+                    }
+                    if (Head.Link == null && Head.Data.CompareTo(newNode.Data) > 0)
+                    {
+                        Head.Link = newNode;
+                        return;
+                    }
+                    Head = Head.Link;
+                    
+                }
             }
-        }*/
+            
+        }
 
     }
 }
