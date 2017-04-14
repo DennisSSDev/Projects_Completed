@@ -23,6 +23,7 @@ namespace LinkedList_ICE
             LinkedList classList = new LinkedList();
             classList.InsertSorted("Dennis");
             classList.InsertSorted("Anthony");
+            classList.InsertSorted("Lazy");
             classList.InsertSorted("Michael");
             classList.InsertSorted("Alessandro");
             classList.InsertSorted("Tadeo");

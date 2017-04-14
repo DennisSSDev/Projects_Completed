@@ -136,7 +136,7 @@ namespace LinkedList_ICE
                 {
                     if(string.Compare(newNode.Data, tempHead.Data) <= 0)
                     {
-                        Insert(count, newNode.Data);
+                        Insert(count-1, newNode.Data);
                         return;
                     }
                     if(tempHead.Link == null)
