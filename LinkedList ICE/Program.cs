@@ -17,17 +17,18 @@ namespace LinkedList_ICE
             villans.Add("catwoman");
             villans.Add("Poison Ivy");
             villans.Insert(0, "Mr.Strange");
-            villans.Traverse();
 
             Console.WriteLine("\n" + villans.GetData(1));
 
             LinkedList classList = new LinkedList();
             classList.InsertSorted("Dennis");
             classList.InsertSorted("Anthony");
+            classList.InsertSorted("Lazy");
             classList.InsertSorted("Michael");
             classList.InsertSorted("Alessandro");
             classList.InsertSorted("Tadeo");
             classList.InsertSorted("Kat");
+            classList.InsertSorted("Zetta");
             classList.Traverse();
         }
     }

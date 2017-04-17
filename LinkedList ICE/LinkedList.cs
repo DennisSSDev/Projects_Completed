@@ -116,36 +116,40 @@ namespace LinkedList_ICE
         }
         public void InsertSorted(string data)
         {
-            
             Node newNode = new Node(data);
-            Node curHead = Head;
+            Node tempHead = Head;
             if (Head == null)
-            {
+            {    
                 Head = newNode;
                 Count++;
-                return;
             }
-            else if(Head != null)
+            else if(string.Compare(newNode.Data,tempHead.Data) < 0)
             {
-                while (Head != null)
-                {
-                    if (newNode.Data.CompareTo(Head.Data) <= 0)
-                    {
-                        Node someNode = Head;
-                        Head = newNode;
-                        Head.Link = someNode;
-                        return;
-                    }
-                    if (Head.Link == null && Head.Data.CompareTo(newNode.Data) > 0)
-                    {
-                        Head.Link = newNode;
-                        return;
-                    }
-                    Head = Head.Link;
-                    
-                }
+                Node holder = Head;
+                Head = newNode;
+                Head.Link = holder;
             }
-            
+            else
+            {
+                int count = 0;
+                while(tempHead != null)
+                {
+                    if(string.Compare(newNode.Data, tempHead.Data) <= 0)
+                    {
+                        Insert(count-1, newNode.Data);
+                        return;
+                    }
+                    if(tempHead.Link == null)
+                    {
+                        tempHead.Link = newNode;
+                        return;
+                    }
+                    
+                    tempHead = tempHead.Link;
+                    count++;
+                }
+                
+            }
         }
 
     }
