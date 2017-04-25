@@ -8,27 +8,64 @@ namespace HW4
 {
     class LinkedList : IList
     {
+        Node head;
+        Node tail;
+        int counter = 0;
+        public LinkedList()
+        {
+
+        }
         public int Count
         {
             get
             {
-                throw new NotImplementedException();
+                return counter;
             }
         }
 
         public void Add(string data)
         {
-            throw new NotImplementedException();
+            Node newNode = new Node(data);
+            if(tail == null)
+            {
+                tail = newNode;
+                head = tail;
+                counter++;
+            }
+            else
+            {
+                while (tail!=null)
+                {
+                    tail = tail.Next;
+                }
+                tail = newNode;
+                counter++;
+            }
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            tail = null;
+            head = tail;
+            counter = 0;
         }
 
         public string GetElement(int index)
         {
-            throw new NotImplementedException();
+            Node temp = head;
+            int count = 0;
+            while (count != index && temp != null)//think about this 
+            {
+                temp = temp.Next;
+            }
+            if(temp == null)
+            {
+                return null;
+            }
+            else
+            {
+                return temp.Data;
+            }
         }
 
         public void Insert(string data, int index)
