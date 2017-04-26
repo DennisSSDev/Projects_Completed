@@ -46,6 +46,7 @@ namespace ICE_For_Hashing
                 if (newDict.ContainsKey(value))
                 {
                     newListStrings.Add(value);
+                    Console.WriteLine(value);
                     maxDictRelay++;
                 }
             }
@@ -55,7 +56,7 @@ namespace ICE_For_Hashing
             }
             newTimer.StopTimer();
             Console.WriteLine(maxDictRelay + " " + newTimer.TotalTIme);
-
+            
         }
     }
 }
