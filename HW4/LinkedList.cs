@@ -13,7 +13,7 @@ namespace HW4
         int counter = 0;
         public LinkedList()
         {
-
+            //No need to establish anything in the constructor
         }
         public int Count
         {
@@ -23,11 +23,11 @@ namespace HW4
             }
         }
 
-        public void Add(string data)//works fine, not sure if tail == head is neccessary
+        public void Add(string data)//works fine
         {
-            Node newNode = new Node(data);
-            //add a new node when there are no nodes 
+            Node newNode = new Node(data); 
             //add a new node at the end of the list
+            //if there is nothing in the list both head and tail are the newNode
             if (head == null)
             {
                 head = newNode;
@@ -35,15 +35,9 @@ namespace HW4
                 counter++;
                 return;
             }
-            
-            Node current = head;
-            while (current.Next != null)
-            {
-                current = current.Next;
-            }
+            tail.Next = newNode;
+            newNode.Previous = tail;
             tail = newNode;
-            current.Next = newNode;
-            current.Next = tail;
             counter++;
             
         }
@@ -68,10 +62,9 @@ namespace HW4
             {
                 return null;
             }
-            else
-            {
-                return temp.Data;
-            }
+           
+            return temp.Data;
+           
         }
 
         public void Insert(string data, int index)
