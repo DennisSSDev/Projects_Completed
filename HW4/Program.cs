@@ -46,8 +46,6 @@ namespace HW4
                         Node storedNode = new Node(listOfNodes.Remove(ran.Next(0, listOfNodes.Count+1)));
                         listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count + 1));
                         break;
-
-
                     default:
                         listOfNodes.Add(commander);
                         break;

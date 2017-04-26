@@ -77,44 +77,44 @@ namespace HW4
         public void Insert(string data, int index)
         {
             int counter1 = 0;
-            Node tempH = head;
             Node newNode = new Node(data);
             if(index <=0)//works fine
             {
-                Node temp = head;
 
+                Node save = head;
                 head = newNode;
-
-                head.Next = temp;
+                head.Next = save;
                 counter++;
                 return;
             }
-            while(tempH != null)
+            else if (index >= counter)
             {
-                if(counter1 == index)
-                {
-
-                    Node store1 = tempH;
-                    Node store2 = tempH.Next;
-                    Node store3 = tempH.Previous;
-                    tempH = newNode;
-                    tempH.Next = store2;
-                    tempH.Previous = store1;
-                    store1.Previous = store3;
-                    counter++;
-                    return;
-                }
-                tempH = tempH.Next;
-                counter1++;
+                Add(data);
             }
-            Add(data);
+            else
+            {
+                Node current = head;
+                while (counter1 != index)
+                {
+                    Node save2 = current;
+                    current = current.Next;
+                    current.Previous = save2;
+                }
+                Node save = current;//save to set it to the next
+                current = newNode;
+                current.Next = save;
+                current.Previous = save.Previous;
+                current.Next.Previous = current;//Might be unneccessary
+                current.Previous.Next = current;//same as above 
+                //If the index in between the node list 
+                //4 actions requierd to set the next and previous nodes
+            }
         }
 
         public string Remove(int index)
         {
             
             int counter2 = 0;
-            Node tempH = head;
             if (index < 0 || index > counter)
             {
                 return null;
@@ -123,44 +123,48 @@ namespace HW4
             {
                 if(head != null)
                 {
-                    string storage = tempH.Data;
-
-                    tempH = tempH.Next;
-                    tempH.Previous = null;
+                    Node tempH1 = head;
+                    string storage = tempH1.Data;
+                    head = head.Next;
+                    head.Previous = null;
                     counter--;
                     return storage;
                 }
-                else
+                else if(head == null)
                 {
                     return null;
-                }
-                
+                } 
             }
-            while(tempH != null || index != counter2)
+            Node tempH = head;
+            while (index != counter2)
             {
+                Node save1 = tempH;
                 tempH = tempH.Next;
+                tempH.Previous = save1;
                 counter2++;
             }
             if(tempH == null)
             {
                 return null;
             }
-            if(tempH.Next == null)
+            else if(tempH == tail)
             {
                 string saver = tempH.Data;
+                Node saver2 = tempH.Previous;
                 tail = tempH.Previous;
-                tempH = null;
                 tail.Next = null;
                 counter--;
                 return saver;
             }
             else
             {
+                //below it doesn't work
                 string saver = tempH.Data;
-                Node right = tempH.Next;//the tailer
-                Node left = tempH.Previous;//the starter
-                tempH = left;
-                tempH.Next = right;
+                Node right = tempH.Next;
+                Node left = tempH.Previous;
+                tempH = right;
+                tempH.Previous = left;
+
                 counter--;
                 return saver; 
             }
