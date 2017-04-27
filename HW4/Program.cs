@@ -41,8 +41,25 @@ namespace HW4
                         listOfNodes.Remove(ranRemoval.Next(0,listOfNodes.Count));
                         break;
                     case "scramble"://look at the linked list code first
-                        Node storedNode = new Node(listOfNodes.Remove(ran.Next(0, listOfNodes.Count+1)));
-                        listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count + 1));
+                        string storing = listOfNodes.Remove(ran.Next(0, listOfNodes.Count));
+                        Node storedNode = new Node(storing);
+                        if (listOfNodes.Count > 0)
+                        {
+                            listOfNodes.Insert(storedNode.Data, ran.Next(1, listOfNodes.Count));//look at this again later
+                        }
+                        else
+                        {
+                            if(storedNode.Data == null)
+                            {
+                                Console.WriteLine("You tried to scramble, but there's nothing in the list anymore, your last member was: Nothing" );
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("You tried to scramble, but there's nothing in the list anymore, your last member was: " + storedNode.Data);
+                            }
+                            
+                        }
                         break;
                     default:
                         listOfNodes.Add(commander);

@@ -73,32 +73,41 @@ namespace HW4
             Node newNode = new Node(data);
             if(index <=0)//works fine
             {
-
                 Node save = head;
                 head = newNode;
-                head.Next = save;
+                if (save.Next != null)
+                {
+                    head.Next = save;
+                    save.Previous = head;
+                }
                 counter++;
                 return;
-            }
-            else if (index >= counter)
-            {
-                Add(data);
             }
             else
             {
                 Node current = head;
-                while (counter1 != index)
+                while (counter1 != index && current.Next != null)
                 {
                     Node save2 = current;
                     current = current.Next;
-                    current.Previous = save2;
+                    counter1++;
+                }
+                if (index >= counter)
+                {
+                    Add(data);
+                    counter++;
+                    return;
                 }
                 Node save = current;//save to set it to the next
+                Node save3 = current.Previous;
                 current = newNode;
                 current.Next = save;
-                current.Previous = save.Previous;
-                current.Next.Previous = current;//Might be unneccessary
-                current.Previous.Next = current;//same as above 
+                save.Previous = current;
+                current.Previous = save3;
+                save3.Next = current;
+                //current.Next.Previous = current;//Might be unneccessary
+                //current.Previous.Next = current;//same as above 
+                counter++;
                 //If the index in between the node list 
                 //4 actions requierd to set the next and previous nodes
             }
@@ -106,56 +115,46 @@ namespace HW4
 
         public string Remove(int index)
         {
-            
             int counter2 = 0;
-            if (index < 0 || index > counter)
+            if (index < 0 || index > counter || head == null)
             {
                 return null;
             }
             else if (index == 0)
             {
-                if(head != null)
-                {
-                    Node tempH1 = head;
-                    string storage = tempH1.Data;
-                    head = head.Next;
-                    head.Previous = null;
-                    counter--;
-                    return storage;
-                }
-                else if(head == null)
-                {
-                    return null;
-                } 
+                string storage = head.Data;   
+              Node store = head;
+              head = head.Next;
+              if (head != null)
+              {
+                  head.Previous = null;
+              }
+                counter--;
+                return storage;
             }
-            Node tempH = head;
-            while (index != counter2)
+            else if(counter-1 == index)
             {
-                Node save1 = tempH;
-                tempH = tempH.Next;
-                tempH.Previous = save1;
-                counter2++;
-            }
-            if(tempH == null)
-            {
-                return null;
-            }
-            else if(tempH == tail)
-            {
-                string saver = tempH.Data;
-                Node saver2 = tempH.Previous;
-                tail = tempH.Previous;
+                string saver = tail.Data;
+                tail = tail.Previous;
                 tail.Next = null;
                 counter--;
                 return saver;
             }
             else
             {
+                Node tempH = head;
+                while (index != counter2)
+                {
+                    Node save1 = tempH;
+                    tempH = tempH.Next;
+                    counter2++;
+                }
                 //below it doesn't work
                 string saver = tempH.Data;
                 Node right = tempH.Next;
                 Node left = tempH.Previous;
                 tempH = right;
+                left.Next = right;
                 tempH.Previous = left;
 
                 counter--;
