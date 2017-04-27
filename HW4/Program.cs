@@ -45,7 +45,7 @@ namespace HW4
                         Node storedNode = new Node(storing);
                         if (listOfNodes.Count > 0)
                         {
-                            listOfNodes.Insert(storedNode.Data, ran.Next(1, listOfNodes.Count));//look at this again later
+                            listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count));//look at this again later
                         }
                         else
                         {
