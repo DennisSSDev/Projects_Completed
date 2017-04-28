@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace HW4
 {
-    class LinkedList : IList
+    class LinkedList : IList//fuck this program
     {
         Node head;
         Node tail;
         int counter = 0;
-        public LinkedList()
+        public LinkedList()//constructor for init
         {
             //No need to establish anything in the constructor
         }
-        public int Count
+        public int Count//keeps track of how many words are in the doublylinked list
         {
             get
             {
@@ -23,7 +23,7 @@ namespace HW4
             }
         }
 
-        public void Add(string data)//works fine
+        public void Add(string data)//regular add method for linked list but will change the tail if the head isn't null
         {
             Node newNode = new Node(data); 
             //add a new node at the end of the list
@@ -42,14 +42,14 @@ namespace HW4
             
         }
 
-        public void Clear()
+        public void Clear()//clears the list of all members
         {
             tail = null;
             head = tail;
             counter = 0;
-        }//works fine
+        }
 
-        public string GetElement(int index)//works fine
+        public string GetElement(int index)//returns a link's data at the apropriate index, if the index is null, returns null
         {
             Node temp = head;
             int count = 0;
@@ -64,22 +64,23 @@ namespace HW4
             }
            
             return temp.Data;
-           
         }
-
-        public void Insert(string data, int index)
+        public void Insert(string data, int index)//inserts a node at the appropriate index
         {
             int counter1 = 0;
             Node newNode = new Node(data);
-            if(index <=0)//works fine
-            {
-                Node save = head;
-                head = newNode;
-                if (save.Next != null)
+            if(index <=0)//if the index sets the value at 0 or below it, will set the head to the new node and change the next node to the old node if there 
+            {//already existed a head (wasn't null)
+                if(head == null)//if there is nothing at the head, add the new node and set the tail and the head to the same value
                 {
-                    head.Next = save;
-                    save.Previous = head;
+                    Add(data);
+                    return;
                 }
+                Node store = head;
+                head = newNode;
+                head.Next = store;
+                store.Previous = head;
+
                 counter++;
                 return;
             }
@@ -92,10 +93,10 @@ namespace HW4
                     current = current.Next;
                     counter1++;
                 }
-                if (index >= counter)
-                {
+                if (index >= counter-1)
+                {//not sure if this is ever vald
                     Add(data);
-                    counter++;
+                   
                     return;
                 }
                 Node save = current;//save to set it to the next

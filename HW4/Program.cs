@@ -43,23 +43,11 @@ namespace HW4
                     case "scramble"://look at the linked list code first
                         string storing = listOfNodes.Remove(ran.Next(0, listOfNodes.Count));
                         Node storedNode = new Node(storing);
-                        if (listOfNodes.Count > 0)
+                        if(storedNode.Data == null)
                         {
-                            listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count));//look at this again later
+                            break;
                         }
-                        else
-                        {
-                            if(storedNode.Data == null)
-                            {
-                                Console.WriteLine("You tried to scramble, but there's nothing in the list anymore, your last member was: Nothing" );
-
-                            }
-                            else
-                            {
-                                Console.WriteLine("You tried to scramble, but there's nothing in the list anymore, your last member was: " + storedNode.Data);
-                            }
-                            
-                        }
+                        listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count));//look at this again later
                         break;
                     default:
                         listOfNodes.Add(commander);
