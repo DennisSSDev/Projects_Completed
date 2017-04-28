@@ -114,14 +114,15 @@ namespace HW4
             }
         }
 
-        public string Remove(int index)
+        public string Remove(int index)//Removes the node from the list at the specified index
         {
             int counter2 = 0;
-            if (index < 0 || index > counter || head == null)
+            if (index < 0 || index > counter || head == null)//in case the index is completely invalid, or the head is not set to anything,
+                //there won't be anyhting to remove
             {
                 return null;
             }
-            else if (index == 0)
+            else if (index == 0)//if the index lands at the head
             {
                 string storage = head.Data;   
               Node store = head;
@@ -133,7 +134,7 @@ namespace HW4
                 counter--;
                 return storage;
             }
-            else if(counter-1 == index)
+            else if(counter-1 == index)//in case the index lands at the tail, reomeve the tail and reassign nodes
             {
                 string saver = tail.Data;
                 tail = tail.Previous;
@@ -141,7 +142,8 @@ namespace HW4
                 counter--;
                 return saver;
             }
-            else
+            else//if it's neither tail, nor head, continue traversing through the list unttil hit the satisfying index and remove the node at that spot
+            //reasign the nodes accordingly
             {
                 Node tempH = head;
                 while (index != counter2)
