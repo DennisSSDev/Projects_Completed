@@ -11,11 +11,11 @@ namespace HW4
         static void Main(string[] args)
         {
             LinkedList listOfNodes = new LinkedList();
-            string commander = null;
-            Random ranRemoval = new Random();
-            Random ran = new Random();
-            Console.WriteLine("Testing123");
-            while (commander != "quit")
+            string commander = null;//value that will read input
+            Random ranRemoval = new Random();//randomizer
+            Random ran = new Random();//randomizer
+            Console.WriteLine("Testing123");//Greeting message
+            while (commander != "quit")//until you decide to stop, do the following 
             {
                 
                 string temp = Console.ReadLine();
@@ -38,7 +38,7 @@ namespace HW4
                         listOfNodes.Clear();
                         break;
                     case "remove"://look at linked lisk code first
-                        listOfNodes.Remove(ranRemoval.Next(0,listOfNodes.Count));
+                        listOfNodes.Remove(ranRemoval.Next(0,listOfNodes.Count));//randomly remove a member of the list 
                         break;
                     case "scramble"://look at the linked list code first
                         string storing = listOfNodes.Remove(ran.Next(0, listOfNodes.Count));
