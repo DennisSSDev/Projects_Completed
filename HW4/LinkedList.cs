@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace HW4
 {
-    class LinkedList : IList//fuck this program
+    class LinkedList : IList
     {
         Node head;
         Node tail;
         int counter = 0;
         public LinkedList()//constructor for init
         {
-            //No need to establish anything in the constructor
+            //No need to establish anything in the constructor, just here to not cause errors in c#
         }
         public int Count//keeps track of how many words are in the doublylinked list
         {
@@ -94,7 +94,7 @@ namespace HW4
                     counter1++;
                 }
                 if (index >= counter-1)
-                {//not sure if this is ever vald
+                {
                     Add(data);
                    
                     return;
@@ -142,8 +142,8 @@ namespace HW4
                 counter--;
                 return saver;
             }
-            else//if it's neither tail, nor head, continue traversing through the list unttil hit the satisfying index and remove the node at that spot
-            //reasign the nodes accordingly
+            else//if it's neither tail, nor head, continue traversing through the list until hit the satisfying index and remove the node at that spot
+            //reassign the nodes accordingly
             {
                 Node tempH = head;
                 while (index != counter2)
@@ -152,7 +152,6 @@ namespace HW4
                     tempH = tempH.Next;
                     counter2++;
                 }
-                //below it doesn't work
                 string saver = tempH.Data;
                 Node right = tempH.Next;
                 Node left = tempH.Previous;

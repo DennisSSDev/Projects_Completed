@@ -31,26 +31,27 @@ namespace HW4
                             Console.WriteLine(listOfNodes.GetElement(i));
                         }
                         break;
-                    case "count":
-                        Console.WriteLine(listOfNodes.Count);
+                    case "count"://gives the total count of the members in the linked list
+                        Console.WriteLine("the total count of nodes is: " + listOfNodes.Count);
                         break;
-                    case "clear":
+                    case "clear"://cleares the list
+                        Console.WriteLine("The list is cleared");
                         listOfNodes.Clear();
                         break;
                     case "remove"://look at linked lisk code first
-                        listOfNodes.Remove(ranRemoval.Next(0,listOfNodes.Count));//randomly remove a member of the list 
+                        string removed = listOfNodes.Remove(ranRemoval.Next(0,listOfNodes.Count));//randomly remove a member of the list
+                        Console.WriteLine(removed + " has been removed from the list"); 
                         break;
-                    case "scramble"://look at the linked list code first
+                    case "scramble"://look at the linked list code first (will first remove a member of the list and then put it back into the list
+                        //at a random position
                         string storing = listOfNodes.Remove(ran.Next(0, listOfNodes.Count));
+                        Console.WriteLine(storing + " has been scrambled");
                         Node storedNode = new Node(storing);
-                        if(storedNode.Data == null)
-                        {
-                            break;
-                        }
-                        listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count));//look at this again later
+                        listOfNodes.Insert(storedNode.Data, ran.Next(0, listOfNodes.Count));
                         break;
                     default:
-                        listOfNodes.Add(commander);
+                        listOfNodes.Add(commander);//if none of the commands are met, add a member to the list 
+                        Console.WriteLine(commander + " has been added to the list");
                         break;
                 }
             }
