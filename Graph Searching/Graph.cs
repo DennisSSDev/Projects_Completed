@@ -65,7 +65,7 @@ namespace Graph_Searching
             connections[4, 4] = 0;
         }
 
-        List<String> GetAdjacentList(string room)
+        public List<String> GetAdjacentList(string room)
         {
             int count = 0;
             List<String> someString = new List<string>();
@@ -78,7 +78,7 @@ namespace Graph_Searching
                 count++;
             }
 
-            for (int i = 0; i < connections.GetUpperBound(1); i++)
+            for (int i = 0; i < 5; i++)
             {
                 if (connections[count,i] == 1)
                 {
@@ -86,6 +86,31 @@ namespace Graph_Searching
                 }
             }
             return someString;
+        }
+        public bool IsConnected(String room1, String room2)
+        {
+            int count1 = 0;
+            int count2 = 0;
+            foreach (var item in vertexList)
+            {
+                if (room1 == item.RoomName)
+                    break;
+                count1++;
+            }
+            foreach (var item in vertexList)
+            {
+                if (room2 == item.RoomName)
+                    break;
+                count2++;
+            }
+            if(connections[count1, count2] == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

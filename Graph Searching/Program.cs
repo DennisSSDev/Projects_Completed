@@ -10,7 +10,7 @@ namespace Graph_Searching
     {
         static void Main(string[] args)
         {
-            AdjacencyList someList = new AdjacencyList();
+            Graph someList = new Graph();
             bool won = false;
             string startingRoom = "Alessandro's shitty room";
             string temp = null;
