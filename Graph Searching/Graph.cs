@@ -28,7 +28,7 @@ namespace Graph_Searching
             dictList.Add("Alessandro's shitty room", alRoom);
             dictList.Add("Sol", sol);
             dictList.Add("Outside World", outsideWorld);
-            dictList.Add("golisano", golisano);
+            dictList.Add("Golisano", golisano);
             dictList.Add("Steve's Office", steveOffice);
 
             vertexList2.Add(alRoom);

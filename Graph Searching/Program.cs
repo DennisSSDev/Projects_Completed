@@ -13,9 +13,10 @@ namespace Graph_Searching
             Graph someList = new Graph();
             bool won = false;
             string startingRoom = "Alessandro's shitty room";
+            string notStartingRoom = "Golisano";
             string temp = null;
             string storage = null;
-            someList.DepthFirst(startingRoom);
+            someList.DepthFirst(notStartingRoom);
             /*while (won != true)
             {
                 storage = null;
