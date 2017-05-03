@@ -9,9 +9,11 @@ namespace Graph_Searching
     class Vertex
     {
         public string RoomName { get; set; }
-        public Vertex(string name)
+        public bool Visited { get; set; }
+        public Vertex(string name, bool visited = false)
         {
             this.RoomName = name;
+            this.Visited = visited;
         }
 
     }

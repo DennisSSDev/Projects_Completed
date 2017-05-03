@@ -12,6 +12,11 @@ namespace Graph_Searching
         int[,] connections = new int[5,5];
 
         Dictionary<String, List<String>> adjDict = new Dictionary<string, List<string>>();
+
+        Dictionary<String, Vertex> dictList = new Dictionary<string, Vertex>();
+        List<Vertex> vertexList2 = new List<Vertex>();
+
+
         public Graph()
         {
             Vertex alRoom = new Vertex("Alessandro's shitty room");
@@ -19,6 +24,18 @@ namespace Graph_Searching
             Vertex outsideWorld = new Vertex("Outside World");
             Vertex golisano = new Vertex("Golisano");
             Vertex steveOffice = new Vertex("Steve's Office");
+
+            dictList.Add("Alessandro's shitty room", alRoom);
+            dictList.Add("Sol", sol);
+            dictList.Add("Outside World", outsideWorld);
+            dictList.Add("golisano", golisano);
+            dictList.Add("Steve's Office", steveOffice);
+
+            vertexList2.Add(alRoom);
+            vertexList2.Add(sol);
+            vertexList2.Add(outsideWorld);
+            vertexList2.Add(golisano);
+            vertexList2.Add(steveOffice);
 
             vertexList[0] = alRoom;
             vertexList[1] = sol;
@@ -63,6 +80,83 @@ namespace Graph_Searching
             connections[4, 2] = 0;
             connections[4, 3] = 1;
             connections[4, 4] = 0;
+        }
+        public void Reset()
+        {
+            foreach (var item in vertexList2)
+            {
+                item.Visited = false;
+            }
+        }
+        public Vertex GetAdjacentUnivisited(String name)
+        {
+            int index = 0;
+            foreach (var item in vertexList2)
+            {
+                if(name == item.RoomName)
+                {
+                    index = vertexList2.IndexOf(item);
+                }
+                //add a way to see if the name is valide
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (connections[index, i] == 1)
+                {
+                    if (vertexList2[i].Visited == false)
+                    {
+                        vertexList2[i].Visited = false;
+                        return vertexList2[i];
+                    }
+                }
+
+            }
+            return null;
+
+
+        }
+        public void DepthFirst(String name)
+        {
+            int counter = 0;
+            foreach (var item in vertexList2)
+            {
+                if(item.RoomName == name)
+                {
+                    counter++;
+                    
+                }
+            }
+            if(counter>1 || counter < 1)
+            {
+                Console.WriteLine("No word was found with the specified name");
+                return;
+                
+            }
+            else
+            {
+                Reset();
+                Stack<Vertex> stack = new Stack<Vertex>();
+                Console.WriteLine(dictList[name].RoomName);
+                stack.Push(dictList[name]);
+                dictList[name].Visited = true;
+                while(stack.Count != 0)
+                {
+                    Vertex store = GetAdjacentUnivisited(stack.Peek().RoomName);
+
+                    if(store == null)
+                    {
+                        stack.Pop();
+                    }
+                    else
+                    {
+                        Console.WriteLine(store.RoomName);
+                        stack.Push(store);
+                        store.Visited = true;
+                    }
+                }
+
+            }
         }
 
         public List<String> GetAdjacentList(string room)

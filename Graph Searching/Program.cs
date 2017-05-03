@@ -15,7 +15,8 @@ namespace Graph_Searching
             string startingRoom = "Alessandro's shitty room";
             string temp = null;
             string storage = null;
-            while (won != true)
+            someList.DepthFirst(startingRoom);
+            /*while (won != true)
             {
                 storage = null;
                 foreach (var item in someList.GetAdjacentList(startingRoom))
@@ -39,7 +40,7 @@ namespace Graph_Searching
                     won = true;
                     Console.WriteLine("You have reached your destination");
                 }
-            }
+            }*/
         }
     }
 }
