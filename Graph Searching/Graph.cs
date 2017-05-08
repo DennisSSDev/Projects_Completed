@@ -106,7 +106,7 @@ namespace Graph_Searching
                 {
                     if (vertexList2[i].Visited == false)
                     {
-                        vertexList2[i].Visited = false;
+                        vertexList2[i].Visited = true;
                         return vertexList2[i];
                     }
                 }
@@ -131,7 +131,6 @@ namespace Graph_Searching
             {
                 Console.WriteLine("No word was found with the specified name");
                 return;
-                
             }
             else
             {
