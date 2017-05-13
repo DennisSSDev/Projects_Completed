@@ -33,7 +33,7 @@ namespace HW5_SearchingGame
         bool allow = true;
         public GameBoard()
         {
-            
+       
             Thread bugsThread = new Thread((object obj) =>
             {
                 player = new Player();

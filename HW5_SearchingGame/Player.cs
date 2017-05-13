@@ -22,7 +22,7 @@ namespace HW5_SearchingGame
         Rectangle size;
         public Rectangle playerObj { get; set; }
         public Texture2D image { get; set; }
-        public Player()
+        public Player()//Make a parametized constructor to pass in the board to not continuosly destroy the program
         {
             size = new Rectangle(x, y, 50, 50);
             newRan = new Random();
