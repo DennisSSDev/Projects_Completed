@@ -17,7 +17,7 @@ namespace HW5_SearchingGame
         int[] grid = new int[64];
         string[] lines = new string[8];
         string[] separateLines = new string[64];
-        Rectangle[] invalidPositions = new Rectangle[4];
+        Rectangle[] invalidPositions = new Rectangle[8];
         int countForInvalid = 0;
         const int xInit = 0;
         int x = 0;
@@ -26,19 +26,25 @@ namespace HW5_SearchingGame
         object one = new object();
         object two = new object();
         Random newRan;
+        Random newRan2;
         Rectangle box = new Rectangle(-10, 0, 75, 75);
         Rectangle[] boxes = new Rectangle[64];
         Texture2D rectBox;
         Player player;
+        public Player Player { get { return player; } }
         Target tg;
+        public Target Target { get { return tg; } }
+        
         Thread newThread;
         Thread thread2;
         public Texture2D Texture { get; set; }
         bool allow = true;
         public GameBoard()
         {
-            player = new Player(this, new Random());
-            tg = new Target(this, new Random());
+            newRan = new Random();
+            newRan2 = new Random();
+            player = new Player(this, newRan);
+            tg = new Target(this, newRan2);
             //Thread bugsThread = new Thread((object obj) =>
             // {
 
@@ -48,10 +54,11 @@ namespace HW5_SearchingGame
 
             thread2 = new Thread((two) => { two = player; tg.Move(player); });
 
-            
+            newThread.Start();
+            thread2.Start();
 
-           // });
-          //  bugsThread.Start();
+            // });
+            //  bugsThread.Start();
             newRan = new Random();
            
         }
@@ -102,25 +109,28 @@ namespace HW5_SearchingGame
         }
         public void startGame(SpriteBatch spriteBatch)
         {
-           
-            
-            
+            Player player = new Player(this, new Random());
+            Target target = new Target(this, new Random());        
         }
         public void drawBoard(SpriteBatch spriteBatch)
         {
             ReadBoard();
             if (allow)
             {
-                for (int i = 0; i < 64; i++)
+                for (int i = 0; i < grid.Length; i++)
                 {
-                    if (i == 8 || i == 16 || i == 24 || i == 32 || i == 40
-                        || i == 48 || i == 56)
+                    boxes[i] = new Rectangle(x, y, 50, 50);
+                    if (i == 7 || i == 15 || i == 23 || i == 31 || i == 39
+                        || i == 47 || i == 55)
                     {
                         x = xInit;
                         y += 50;
                     }
-                    boxes[i] = new Rectangle(x, y, 50, 50);
-                    x += 50;
+                    else
+                    {
+                        
+                        x += 50;
+                    }
 
                 }
             }
@@ -128,12 +138,23 @@ namespace HW5_SearchingGame
             int count1 = 0;
 
             Color colorSum = new Color();
-            foreach (var item in grid1)
+            foreach (var item in grid)
             {
                 if (item == 1)
                 {
-                    colorSum = Color.Gray;
-                    invalidPositions[countForInvalid] = boxes[count1];
+                    try
+                    {
+                        colorSum = Color.Gray;
+                        invalidPositions[countForInvalid] = boxes[count1];
+                        countForInvalid++;
+                    }
+                    catch (Exception)
+                    {
+
+                        Debug.WriteLine("error");
+                    }
+                        
+                     
                 }
                 else
                 {
@@ -146,25 +167,54 @@ namespace HW5_SearchingGame
         }
 
 
-        public bool ValidPosition()
+        public bool ValidPosition(int tempX,int tempY)//pass in one rectangle and see if it will change anything,should work
         {
+            Rectangle temp;//instead of using 2 rectangles for checking, use one and lock it just so one thread can use it at a time
+            Rectangle temp2;
+            lock (one)
+            {
+                temp = new Rectangle(tg.X + tempX, tg.Y + tempY, 50, 50);
+            }
+            
+            
+                temp2 = new Rectangle(player.X + tempX, player.Y + tempY, 50, 50);
+            
+            
             foreach (var item in invalidPositions)
             {
-                if(item.X == player.X && item.Y == player.Y)
+                
+                    if (item.Location == temp2.Location)
+                    {
+                        return false;
+                    }
+                
+                
+                
+                    if (item.Location == temp.Location)
+                    {
+                        return false;
+                    }
+                
+                
+            }
+            
+                if (player.X + tempX >= 400 || player.X + tempX < 0 || player.Y + tempY >= 400 || player.Y + tempY < 0)
                 {
                     return false;
                 }
-            }
-            if (player.X > 400 || player.X < 0 || player.Y > 400 || player.Y < 0)
-            {
-                return false;
-            }
+            
+            
+                if (tg.X + tempX >= 400 || tg.X + tempX < 0 || tg.Y + tempY >= 400 || tg.Y + tempY < 0)
+                {
+                    return false;
+                }
+            
+            
             return true;
         }
         public void StartGame()
         {
-            newThread.Start();
-            thread2.Start();
+            
         } 
     }
 }

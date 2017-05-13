@@ -15,11 +15,9 @@ namespace HW5_SearchingGame
         Texture2D dafy;
         Texture2D bugs;
         Rectangle boxSize;
-        Player newP;
+        
         Random ran = new Random();
-        Target tg;
         GameBoard obj;
-        bool allower = true;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -52,14 +50,13 @@ namespace HW5_SearchingGame
             square = Content.Load<Texture2D>("square");
             boxSize = new Rectangle(0, 0, 50, 50);
             obj = new GameBoard();
-            newP = new Player(obj, ran);
-            tg = new Target(obj, ran);
+            
             dafy = Content.Load<Texture2D>("Dafy");
             bugs = Content.Load<Texture2D>("bugs");
             obj.Texture = square;
-            newP.image = bugs;
-            tg.texOfTarget = dafy;
-            obj.StartGame();
+            obj.Player.image = bugs;
+            obj.Target.texOfTarget = dafy;
+            //obj.StartGame();
             // TODO: use this.Content to load your game content here
         }
 
@@ -82,10 +79,6 @@ namespace HW5_SearchingGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
-            if (newP.dead == true)
-            {
-                this.Exit();
-            }
             // TODO: Add your update logic here
             
             base.Update(gameTime);
@@ -100,8 +93,9 @@ namespace HW5_SearchingGame
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             obj.drawBoard(spriteBatch);
-            newP.DrawPlayer(spriteBatch);
-            tg.DrawTarget(spriteBatch);
+            spriteBatch.Draw(obj.Player.image, obj.Player.playerObj, Color.White);
+            spriteBatch.Draw(obj.Target.texOfTarget, obj.Target.targetObj, Color.White);
+            
             // TODO: Add your drawing code here
             spriteBatch.End();
             base.Draw(gameTime);

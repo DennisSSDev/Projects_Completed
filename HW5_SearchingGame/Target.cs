@@ -20,6 +20,7 @@ namespace HW5_SearchingGame
         Rectangle size;
         GameBoard gameB;
         Random num;
+        public bool Dead { get; set; } = false;
         public Rectangle targetObj { get; set; }
         public Texture2D texOfTarget { get; set; }
         public Target(GameBoard ex, Random num)
@@ -32,63 +33,80 @@ namespace HW5_SearchingGame
         }
         public void Move(Player pl)
         {
-            int tempX = 0;
-            int tempY = 0;
+            object temp = new object();
+            
+            
+                lock (temp)
+                {
+                while (this.X != pl.X || this.Y != pl.Y)
+                {
 
-            if (this.X == pl.X && this.Y == pl.Y)
-            {
-                game1.Exit();
-            }
 
 
-            int ran = newRan.Next(250, 351);
-            Thread.Sleep(ran);
-            int ran2 = newRan.Next(0, 8);
-            switch (ran2)
-            {
-                case 0:
-                    tempX += 50;
-                    break;
+                    int tempX = 0;
+                    int tempY = 0;
+                    int ran = newRan.Next(300, 501);
 
-                case 1:
-                    tempX -= 50;
-                    break;
-                case 2:
-                    tempY += 50;
-                    break;
+                    Thread.Sleep(ran);
 
-                case 3:
-                    tempY -= 50;
-                    break;
+                    int ran2 = newRan.Next(0, 8);
+                    switch (ran2)
+                    {
+                        case 0:
+                            tempX += 50;
+                            break;
 
-                case 4:
-                    tempX += 50;
-                    tempY += 50;
-                    break;
+                        case 1:
+                            tempX -= 50;
+                            break;
+                        case 2:
+                            tempY += 50;
+                            break;
 
-                case 5:
-                    tempX -= 50;
-                    tempY -= 50;
-                    break;
+                        case 3:
+                            tempY -= 50;
+                            break;
 
-                case 6:
-                    tempX -= 50;
-                    tempY += 50;
-                    break;
+                        case 4:
+                            tempX += 50;
+                            tempY += 50;
+                            break;
 
-                case 7:
-                    tempX += 50;
-                    tempY -= 50;
-                    break;
-                default:
-                    break;
-            }
+                        case 5:
+                            tempX -= 50;
+                            tempY -= 50;
+                            break;
 
-            if (gameB.ValidPosition())
-            {
-                this.X += tempX;
-                this.Y += tempY;
-            }
+                        case 6:
+                            tempX -= 50;
+                            tempY += 50;
+                            break;
+
+                        case 7:
+                            tempX += 50;
+                            tempY -= 50;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (gameB.ValidPosition(tempX, tempY))
+                    {
+                        this.x += tempX;
+                        this.y += tempY;
+                        targetObj = new Rectangle(x, y, 50, 50);
+                    }
+                    if (this.X == pl.X && this.Y == pl.Y)
+                    {
+                        Dead = true;
+                        break;
+                    }
+                }
+                }
+                
+            
+
+            
 
 
 

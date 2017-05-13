@@ -35,69 +35,75 @@ namespace HW5_SearchingGame
 
         public void Move(Target tg)
         {
-
-            while (this.X != tg.X || this.Y != tg.Y)
-            {
-
-
-
-                int tempX = 0;
-                int tempY = 0;
-                int ran = newRan.Next(250, 351);
-                Thread.Sleep(ran);
-                int ran2 = newRan.Next(0, 8);
-                switch (ran2)
+            object newObj = new object();
+            
+                lock (newObj)
                 {
-                    case 0:
-                        tempX += 50;
-                        break;
-
-                    case 1:
-                        tempX -= 50;
-                        break;
-                    case 2:
-                        tempY += 50;
-                        break;
-
-                    case 3:
-                        tempY -= 50;
-                        break;
-
-                    case 4:
-                        tempX += 50;
-                        tempY += 50;
-                        break;
-
-                    case 5:
-                        tempX -= 50;
-                        tempY -= 50;
-                        break;
-
-                    case 6:
-                        tempX -= 50;
-                        tempY += 50;
-                        break;
-
-                    case 7:
-                        tempX += 50;
-                        tempY -= 50;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (gameB.ValidPosition())
+                while (this.X != tg.X || this.Y != tg.Y)
                 {
-                    this.X += tempX;
-                    this.Y += tempY;
+
+
+
+                    int tempX = 0;
+                    int tempY = 0;
+                    int ran = newRan.Next(250, 351);
+                    Thread.Sleep(ran);
+                    int ran2 = newRan.Next(0, 8);
+                    switch (ran2)
+                    {
+                        case 0:
+                            tempX += 50;
+                            break;
+
+                        case 1:
+                            tempX -= 50;
+                            break;
+                        case 2:
+                            tempY += 50;
+                            break;
+
+                        case 3:
+                            tempY -= 50;
+                            break;
+
+                        case 4:
+                            tempX += 50;
+                            tempY += 50;
+                            break;
+
+                        case 5:
+                            tempX -= 50;
+                            tempY -= 50;
+                            break;
+
+                        case 6:
+                            tempX -= 50;
+                            tempY += 50;
+                            break;
+
+                        case 7:
+                            tempX += 50;
+                            tempY -= 50;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (gameB.ValidPosition(tempX, tempY))
+                    {
+                        this.x += tempX;
+                        this.y += tempY;
+                        playerObj = new Rectangle(x, y, 50, 50);
+                    }
+                    if (this.X == tg.X && this.Y == tg.Y)
+                    {
+                        dead = true;
+                        break;
+                    }
                 }
-
-
+                    
+                
             }
-            dead = true;
-            
-            
-            
             
 
 
