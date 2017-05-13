@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System;
 namespace HW5_SearchingGame
 {
     /// <summary>
@@ -16,6 +16,8 @@ namespace HW5_SearchingGame
         Texture2D bugs;
         Rectangle boxSize;
         Player newP;
+        Random ran = new Random();
+        Target tg;
         GameBoard obj;
         bool allower = true;
         public Game1()
@@ -49,11 +51,15 @@ namespace HW5_SearchingGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             square = Content.Load<Texture2D>("square");
             boxSize = new Rectangle(0, 0, 50, 50);
-            newP = new Player();
             obj = new GameBoard();
+            newP = new Player(obj, ran);
+            tg = new Target(obj, ran);
+            dafy = Content.Load<Texture2D>("Dafy");
             bugs = Content.Load<Texture2D>("bugs");
             obj.Texture = square;
             newP.image = bugs;
+            tg.texOfTarget = dafy;
+            obj.StartGame();
             // TODO: use this.Content to load your game content here
         }
 
@@ -75,7 +81,11 @@ namespace HW5_SearchingGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
+            if (newP.dead == true)
+            {
+                this.Exit();
+            }
             // TODO: Add your update logic here
             
             base.Update(gameTime);
@@ -91,6 +101,7 @@ namespace HW5_SearchingGame
             spriteBatch.Begin();
             obj.drawBoard(spriteBatch);
             newP.DrawPlayer(spriteBatch);
+            tg.DrawTarget(spriteBatch);
             // TODO: Add your drawing code here
             spriteBatch.End();
             base.Draw(gameTime);

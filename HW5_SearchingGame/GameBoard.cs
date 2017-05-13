@@ -23,25 +23,35 @@ namespace HW5_SearchingGame
         int x = 0;
         const int yInit = 0;
         int y = 0;
-        Player player;
-        Target tg;
+        object one = new object();
+        object two = new object();
         Random newRan;
         Rectangle box = new Rectangle(-10, 0, 75, 75);
         Rectangle[] boxes = new Rectangle[64];
         Texture2D rectBox;
+        Player player;
+        Target tg;
+        Thread newThread;
+        Thread thread2;
         public Texture2D Texture { get; set; }
         bool allow = true;
         public GameBoard()
         {
-       
-            Thread bugsThread = new Thread((object obj) =>
-            {
-                player = new Player();
-                obj = tg;
-                player.Move(tg);
+            player = new Player(this, new Random());
+            tg = new Target(this, new Random());
+            //Thread bugsThread = new Thread((object obj) =>
+            // {
 
-            });
-            bugsThread.Start();
+            //   obj = tg;
+            
+            newThread = new Thread((one) => { one = tg; player.Move(tg); });
+
+            thread2 = new Thread((two) => { two = player; tg.Move(player); });
+
+            
+
+           // });
+          //  bugsThread.Start();
             newRan = new Random();
            
         }
@@ -150,6 +160,11 @@ namespace HW5_SearchingGame
                 return false;
             }
             return true;
+        }
+        public void StartGame()
+        {
+            newThread.Start();
+            thread2.Start();
         } 
     }
 }

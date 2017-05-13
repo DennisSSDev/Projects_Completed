@@ -12,72 +12,93 @@ namespace HW5_SearchingGame
 {
     class Player
     {
-        public Game1 game1;
+        
         Random newRan;
         GameBoard gameB;
         int x = 50;
         int y = 250;
         public int X { get { return x; } set { } }
         public int Y { get { return y; } set { } }
+        public bool dead { get; set; } = false;
         Rectangle size;
         public Rectangle playerObj { get; set; }
         public Texture2D image { get; set; }
-        public Player()//Make a parametized constructor to pass in the board to not continuosly destroy the program
+        public Player(GameBoard ex, Random ran)//Make a parametized constructor to pass in the board to not continuosly destroy the program
         {
             size = new Rectangle(x, y, 50, 50);
-            newRan = new Random();
-            gameB = new GameBoard();
+            newRan = ran;
+            gameB = ex;
+            
             playerObj = size;
             
         }
 
         public void Move(Target tg)
         {
-            int tempX = 0;
-            int tempY = 0;
-            if (this.X == tg.targetObj.X && this.Y == tg.targetObj.Y)
+
+            while (this.X != tg.X || this.Y != tg.Y)
             {
-                game1.Exit();
+
+
+
+                int tempX = 0;
+                int tempY = 0;
+                int ran = newRan.Next(250, 351);
+                Thread.Sleep(ran);
+                int ran2 = newRan.Next(0, 8);
+                switch (ran2)
+                {
+                    case 0:
+                        tempX += 50;
+                        break;
+
+                    case 1:
+                        tempX -= 50;
+                        break;
+                    case 2:
+                        tempY += 50;
+                        break;
+
+                    case 3:
+                        tempY -= 50;
+                        break;
+
+                    case 4:
+                        tempX += 50;
+                        tempY += 50;
+                        break;
+
+                    case 5:
+                        tempX -= 50;
+                        tempY -= 50;
+                        break;
+
+                    case 6:
+                        tempX -= 50;
+                        tempY += 50;
+                        break;
+
+                    case 7:
+                        tempX += 50;
+                        tempY -= 50;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (gameB.ValidPosition())
+                {
+                    this.X += tempX;
+                    this.Y += tempY;
+                }
+
+
             }
-            int ran = newRan.Next(250, 351);
-            Thread.Sleep(ran);
-            int ran2 = newRan.Next(0, 8);
-            switch (ran2)
-            {
-                case 0:  tempX += 50;
-                    break;
-                
-                case 1: tempX -= 50;
-                    break;
-                case 2: tempY += 50;
-                    break;
-
-                case 3: tempY -= 50;
-                    break;
-
-                case 4: tempX += 50;
-                    tempY += 50;
-                    break;
-
-                case 5: tempX -= 50;
-                    tempY -= 50;
-                    break;
-
-                case 6: tempX -= 50;
-                    tempY += 50;
-                    break;
-
-                case 7: tempX += 50;
-                    tempY -= 50;
-                    break;
-                default:
-                    break;
-            }
-            if (gameB.ValidPosition())
-            {
-                this.X += tempX;
-                this.Y += tempY;
-            }
+            dead = true;
+            
+            
+            
+            
 
 
         }
