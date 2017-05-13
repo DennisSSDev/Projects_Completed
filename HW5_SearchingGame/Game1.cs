@@ -11,8 +11,13 @@ namespace HW5_SearchingGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D board;
-
+        Texture2D square;
+        Texture2D dafy;
+        Texture2D bugs;
+        Rectangle boxSize;
+        Player newP;
+        GameBoard obj;
+        bool allower = true;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,7 +47,13 @@ namespace HW5_SearchingGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            board = Content.Load<Texture2D>("board");
+            square = Content.Load<Texture2D>("square");
+            boxSize = new Rectangle(0, 0, 50, 50);
+            newP = new Player();
+            obj = new GameBoard();
+            bugs = Content.Load<Texture2D>("bugs");
+            obj.Texture = square;
+            newP.image = bugs;
             // TODO: use this.Content to load your game content here
         }
 
@@ -66,7 +77,7 @@ namespace HW5_SearchingGame
                 Exit();
 
             // TODO: Add your update logic here
-
+            
             base.Update(gameTime);
         }
 
@@ -77,9 +88,11 @@ namespace HW5_SearchingGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            spriteBatch.Draw(board);
+            spriteBatch.Begin();
+            obj.drawBoard(spriteBatch);
+            newP.DrawPlayer(spriteBatch);
             // TODO: Add your drawing code here
-
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
