@@ -12,10 +12,13 @@ namespace HW5_SearchingGame
 {
     class Player
     {
-        
+        /// <summary>
+        /// Most of the methods/attributes/constructor are similar to the target, I will only comment 
+        /// on the stuff that is different 
+        /// </summary>
         Random newRan;
         GameBoard gameB;
-        int x = 50;
+        int x = 50;//Starting position is right below the target
         int y = 250;
         public int X { get { return x; } set { } }
         public int Y { get { return y; } set { } }
@@ -23,7 +26,7 @@ namespace HW5_SearchingGame
         Rectangle size;
         public Rectangle playerObj { get; set; }
         public Texture2D image { get; set; }
-        public Player(GameBoard ex, Random ran)//Make a parametized constructor to pass in the board to not continuosly destroy the program
+        public Player(GameBoard ex, Random ran)//Make a parametized constructor to pass in the board to not get a stack overflow
         {
             size = new Rectangle(x, y, 50, 50);
             newRan = ran;

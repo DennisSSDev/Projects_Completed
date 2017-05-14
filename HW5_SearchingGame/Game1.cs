@@ -5,7 +5,11 @@ using System;
 namespace HW5_SearchingGame
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// This class serves only for:
+    /// *Creating objects for threading
+    /// *Loading in Textures
+    /// *Checking wether the win condition is met
+    /// *Drawing all the movement
     /// </summary>
     public class Game1 : Game
     {
@@ -21,7 +25,7 @@ namespace HW5_SearchingGame
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            Content.RootDirectory = "Content";//decide to change the game to these dimensions
             graphics.PreferredBackBufferHeight = 400;
             graphics.PreferredBackBufferWidth = 400;
         }
@@ -46,17 +50,17 @@ namespace HW5_SearchingGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);//Loading in all the textures here
             square = Content.Load<Texture2D>("square");
             boxSize = new Rectangle(0, 0, 50, 50);
-            obj = new GameBoard();
+            obj = new GameBoard();//gameBoard taht does all the work
             
             dafy = Content.Load<Texture2D>("Dafy");
             bugs = Content.Load<Texture2D>("bugs");
             obj.Texture = square;
-            obj.Player.image = bugs;
+            obj.Player.image = bugs;//Assign the textures
             obj.Target.texOfTarget = dafy;
-            //obj.StartGame();
+            //obj.StartGame();                                                <---- unneccessary method
             // TODO: use this.Content to load your game content here
         }
 
@@ -78,6 +82,8 @@ namespace HW5_SearchingGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            //Win conditions
+
             if (obj.Player.dead)
             {
                 this.Exit();
@@ -97,6 +103,7 @@ namespace HW5_SearchingGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            //Draw out all the movements
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             obj.drawBoard(spriteBatch);

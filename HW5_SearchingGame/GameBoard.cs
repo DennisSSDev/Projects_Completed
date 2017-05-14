@@ -13,11 +13,16 @@ namespace HW5_SearchingGame
 {
     class GameBoard
     {
-        public int[] grid1 { get; set; }
-        int[] grid = new int[64];
-        string[] lines = new string[8];
-        string[] separateLines = new string[64];
-        Rectangle[] invalidPositions = new Rectangle[8];
+        /// <summary>
+        /// This class allows to read in the board and determine where should the blocks be drawn 
+        /// Starts the threads and basically runs the game
+        /// Determines what is a valid/invalid move
+        /// </summary>
+        public int[] grid1 { get; set; }//property for the grid system of blocks
+        int[] grid = new int[64];//actual grid
+        string[] lines = new string[8];//will be used to read each line from the given file
+        string[] separateLines = new string[64];//each number separated from the lines array
+        Rectangle[] invalidPositions = new Rectangle[8];//collects all the invalid squares (not bounds of the screen)
         int countForInvalid = 0;
         const int xInit = 0;
         int x = 0;
@@ -29,11 +34,11 @@ namespace HW5_SearchingGame
         Random newRan2;
         Rectangle box = new Rectangle(-10, 0, 75, 75);
         Rectangle[] boxes = new Rectangle[64];
-        Player player;
+        Player player;//create the player object for starting thread
         public Player Player { get { return player; } }
-        Target tg;
+        Target tg;//create the target object to start his thread
         public Target Target { get { return tg; } }
-        object key = new object();
+        object key = new object();//object that will allow us to lock the movement of the thread in the move determination method
         Thread newThread;
         Thread thread2;
         public Texture2D Texture { get; set; }
@@ -48,20 +53,29 @@ namespace HW5_SearchingGame
             // {
 
             //   obj = tg;
-            
+            //Creating and starting the threads
             newThread = new Thread((one) => { one = tg; player.Move(tg); });
 
             thread2 = new Thread((one) => { one = player; tg.Move(player); });
-
-            newThread.Start();
-            thread2.Start();
+            try//abort threads if smth wrong occurs
+            {
+                newThread.Start();
+                thread2.Start();
+            }
+            catch (Exception)
+            {
+                newThread.Abort();
+                thread2.Start();
+                
+            }
+            
 
             // });
             //  bugsThread.Start();
             newRan = new Random();
            
         }
-        public void ReadBoard()
+        public void ReadBoard()//method that allows us to create the board based on the read file
         {
             int count = 0;
             using (StreamReader reader = new StreamReader("board.csv"))
@@ -80,7 +94,7 @@ namespace HW5_SearchingGame
             foreach (var item in lines)
             {
 
-                string[] newTemp = item.Split(',');
+                string[] newTemp = item.Split(',');//allows us to read each member of the board separately
                 int count2 = 0;
                 for (int i = count; i < count + 8; i++)
                 {
@@ -89,7 +103,7 @@ namespace HW5_SearchingGame
                 }
                 count += 8;
             }
-            try
+            try//in case we find a faulty member(null or smth that we can't convert) wit finds the ecxeption and writes it out
             {
                 for (int i = 0; i < 64; i++)
                 {
@@ -106,12 +120,12 @@ namespace HW5_SearchingGame
                 Debug.WriteLine(ex.Message);
             }
         }
-        public void startGame(SpriteBatch spriteBatch)
+        public void startGame(SpriteBatch spriteBatch)//a redundant method PS: Steve said it's ok to not use it
         {
             Player player = new Player(this, new Random());
             Target target = new Target(this, new Random());        
         }
-        public void drawBoard(SpriteBatch spriteBatch)
+        public void drawBoard(SpriteBatch spriteBatch)//We now create the board visually
         {
             ReadBoard();
             if (allow)
@@ -141,7 +155,7 @@ namespace HW5_SearchingGame
             {
                 if (item == 1)
                 {
-                    try
+                    try//catch any errors in the process
                     {
                         colorSum = Color.Gray;
                         invalidPositions[countForInvalid] = boxes[count1];
@@ -167,7 +181,7 @@ namespace HW5_SearchingGame
 
 
         public bool ValidPosition(int tempX,int tempY, Rectangle obj)//pass in one rectangle and see if it will change anything,should work
-        {
+        {//Valifdation of each move that the threads make happens here
             //instead of using 2 rectangles for checking, use one and lock it just so one thread can use it at a time
             Rectangle temp;
             lock (key)
@@ -177,22 +191,20 @@ namespace HW5_SearchingGame
 
                 foreach (var item in invalidPositions)
                 {
-                    if (item.Location == temp.Location)
+                    if (item.Location == temp.Location)//if the temp position is inside a grey box, it won;t allow to use that move
                     {
                         return false;
                     }
                 }
 
-                if (temp.X >= 400 || temp.X < 0 || temp.Y >= 400 || temp.Y < 0)
+                if (temp.X >= 400 || temp.X < 0 || temp.Y >= 400 || temp.Y < 0)//if the temp move goes outside the 
+                    //boudning box region, don't allow the move
                 {
                     return false;
                 }
+                //for every other occasion allow the move
                 return true;
             }
         }
-        public void StartGame()
-        {
-            
-        } 
     }
 }
