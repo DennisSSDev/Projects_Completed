@@ -78,7 +78,14 @@ namespace HW5_SearchingGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
+            if (obj.Player.dead)
+            {
+                this.Exit();
+            }
+            if (obj.Target.Dead)
+            {
+                this.Exit();
+            }
             // TODO: Add your update logic here
             
             base.Update(gameTime);

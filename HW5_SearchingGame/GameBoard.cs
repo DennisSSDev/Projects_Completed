@@ -29,12 +29,11 @@ namespace HW5_SearchingGame
         Random newRan2;
         Rectangle box = new Rectangle(-10, 0, 75, 75);
         Rectangle[] boxes = new Rectangle[64];
-        Texture2D rectBox;
         Player player;
         public Player Player { get { return player; } }
         Target tg;
         public Target Target { get { return tg; } }
-        
+        object key = new object();
         Thread newThread;
         Thread thread2;
         public Texture2D Texture { get; set; }
@@ -52,7 +51,7 @@ namespace HW5_SearchingGame
             
             newThread = new Thread((one) => { one = tg; player.Move(tg); });
 
-            thread2 = new Thread((two) => { two = player; tg.Move(player); });
+            thread2 = new Thread((one) => { one = player; tg.Move(player); });
 
             newThread.Start();
             thread2.Start();
@@ -167,50 +166,29 @@ namespace HW5_SearchingGame
         }
 
 
-        public bool ValidPosition(int tempX,int tempY)//pass in one rectangle and see if it will change anything,should work
+        public bool ValidPosition(int tempX,int tempY, Rectangle obj)//pass in one rectangle and see if it will change anything,should work
         {
-            Rectangle temp;//instead of using 2 rectangles for checking, use one and lock it just so one thread can use it at a time
-            Rectangle temp2;
-            lock (one)
+            //instead of using 2 rectangles for checking, use one and lock it just so one thread can use it at a time
+            Rectangle temp;
+            lock (key)
             {
-                temp = new Rectangle(tg.X + tempX, tg.Y + tempY, 50, 50);
-            }
-            
-            
-                temp2 = new Rectangle(player.X + tempX, player.Y + tempY, 50, 50);
-            
-            
-            foreach (var item in invalidPositions)
-            {
-                
-                    if (item.Location == temp2.Location)
-                    {
-                        return false;
-                    }
-                
-                
-                
+                temp = new Rectangle(obj.X + tempX, obj.Y + tempY, 50, 50);
+
+
+                foreach (var item in invalidPositions)
+                {
                     if (item.Location == temp.Location)
                     {
                         return false;
                     }
-                
-                
+                }
+
+                if (temp.X >= 400 || temp.X < 0 || temp.Y >= 400 || temp.Y < 0)
+                {
+                    return false;
+                }
+                return true;
             }
-            
-                if (player.X + tempX >= 400 || player.X + tempX < 0 || player.Y + tempY >= 400 || player.Y + tempY < 0)
-                {
-                    return false;
-                }
-            
-            
-                if (tg.X + tempX >= 400 || tg.X + tempX < 0 || tg.Y + tempY >= 400 || tg.Y + tempY < 0)
-                {
-                    return false;
-                }
-            
-            
-            return true;
         }
         public void StartGame()
         {

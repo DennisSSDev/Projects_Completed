@@ -90,7 +90,7 @@ namespace HW5_SearchingGame
                             break;
                     }
 
-                    if (gameB.ValidPosition(tempX, tempY))
+                    if (gameB.ValidPosition(tempX, tempY,this.targetObj))
                     {
                         this.x += tempX;
                         this.y += tempY;
