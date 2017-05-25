@@ -15,27 +15,58 @@ namespace Soccer
         public Texture2D Box { get; set; }
         public Texture2D Net { get; set; }
         public Rectangle rect { get; set; }
-        List<Rectangle> boxes = new List<Rectangle>();
-        const int width = 50;
-        const int height = 50;
+        private List<Rectangle> boxes = new List<Rectangle>();
+        public const int width = 50;
+        public const int height = 50;
+        public bool goal { get; set; }
+
         public int X { get; set; }
         public int Y { get; set; }
         public Field()
         {
-            boxes.Add(new Rectangle(0, 0, width, height));
+            X = 0;
+            Y = 0;
+            goal = false; // determines whether smb scored or not
         }
         public void SetUp()
         {
             int count = 0;
-            while(count != 77)
+            while(count != 83)
             {
-                //boxes.Add()
+                if(count==11 || count==23 || count == 35 || count == 47 || count == 59 || count == 71)
+                {
+                    X = 0;
+                    Y += 50;
+                    boxes.Add(new Rectangle(X, Y, width, height));
+                }
+                else
+                {
+                    boxes.Add(new Rectangle(X, Y, width, height));
+                    X += 50;
+                }              
+                count++;
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Box, boxes[0], Color.White);
+            foreach (var item in boxes)
+            {
+                if(boxes.IndexOf(item) == 23 || boxes.IndexOf(item) == 35 || boxes.IndexOf(item) == 47)
+                {
+                    spriteBatch.Draw(Net, item, Color.White);
+                }
+                else if( boxes.IndexOf(item) == 34 || boxes.IndexOf(item) == 46 || boxes.IndexOf(item) == 58)
+                {
+                    spriteBatch.Draw(Net, item, Color.Red);
+                }
+                else
+                {
+                    spriteBatch.Draw(Box, item, Color.White);
+                }
+                
+            }
+            
         }
     }
 }
