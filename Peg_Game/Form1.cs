@@ -18,6 +18,12 @@ namespace Peg_Game
         public Form1()
         {
             InitializeComponent();
+            PinSolution obj = new PinSolution();
+            string a = null;
+            int c = 0;
+            int b = 2;
+            a = obj.AddText(a,b,c );
+            a = obj.RemoveText(a);
         }
 
         private void button2_Click(object sender, EventArgs e)
