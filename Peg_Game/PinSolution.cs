@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Peg_Game
 {
@@ -28,30 +29,32 @@ namespace Peg_Game
         public List<int> connections13 = new List<int>();
         public List<int> connections14 = new List<int>();
 
-        public Stack<string> moves = new Stack<string>();
+        public Stack<Pins> removedPinsStack = new Stack<Pins>();
+        Stack<Pins> colPins = new Stack<Pins>();
 
         private int startEmptyPin = 0;
         private int winCount = 0;
-        private int RemovedPins = 0;
-        string moves1 = null;
+        private int removedPins = 1;
+        private int counter = 0;
+        string movesList = null;
         public PinSolution()
         {
             //add all the pins to a single data struct
-            allPins.Add(new Pins() { PinNum = 0, Visited = true, Current = true });//if a pin exists at the spot it has a letter N, if not it has letter E
-            allPins.Add(new Pins() { PinNum = 1, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 2, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 3, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 4, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 5, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 6, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 7, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 8, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 9, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 10, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 11, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 12, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 13, Visited = false, Current = false });
-            allPins.Add(new Pins() { PinNum = 14, Visited = false, Current = false });
+            allPins.Add(new Pins() { PinNum = 0, HasPin = false, Visited = false });//if a pin exists at the spot it has a letter N, if not it has letter E
+            allPins.Add(new Pins() { PinNum = 1, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 2, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 3, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 4, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 5, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 6, HasPin= true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 7, HasPin= true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 8, HasPin= true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 9, HasPin= true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 10,HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 11, HasPin = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 12, HasPin= true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 13, HasPin  = true, Visited = false });
+            allPins.Add(new Pins() { PinNum = 14, HasPin = true, Visited = false });
 
             connections0.Add(3);
             connections0.Add(5);
@@ -134,28 +137,73 @@ namespace Peg_Game
 
         public void Reset(int nextEmptyPin)
         {
-            winCount++;
-            RemovedPins = 0;
+            removedPins = 1;
+            nextEmptyPin++;
             foreach (var item in allPins)
             {
-                item.Visited = false;
+                item.HasPin = false;
             }
-            allPins[nextEmptyPin].Visited = true;
-            allPins[nextEmptyPin].Current = true;
+            allPins[nextEmptyPin].HasPin = false;
+            allPins.Clear();
+        }
+        public void DepthFirstSearch(int winCount)
+        {
+            if (winCount > counter)
+            {
+                Reset(winCount);
+            }
+            counter = winCount;
+            while (removedPins != 14)
+            {
+                int temp = -1;
+                foreach (var item in memberConnections)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        if (allPins[item.Value[i]].HasPin == false )
+                        {
+                            //you can't move unless there is a pin in between, so make sure to check that too
+                            allPins[item.Key].HasPin = false;
+                            temp = (allPins[item.Value[i]].PinNum + item.Key) / 2;
+                            allPins[temp].HasPin = false;
+                            removedPins++;
+                            colPins.Push(allPins[item.Value[i]]);
+                            removedPinsStack.Push(allPins[temp]);
+                            //make sure you exit out of here as soon as this happnes and start the search again
+                            //if you get stuck you have 2 stacks that tell you which moves should be ignored (actually if you do revert your moves, create a new  stack of reverted moves to know for sure to not use that specific move again
 
+
+
+                        }
+                    }
+                    //end of loop, don;t go below until the general algorithm is implemented
+                }
+            }
+            
+            
+
+
+            //at the end whent the loop is done add the win count
+            winCount++;
         }
 
         public void PlayGame()
         {
+            DepthFirstSearch(winCount);
             if(winCount == 15)
             {
                 return;
             }
 
-            if(RemovedPins == 14)
+            if(removedPins == 14)
             {
+                File.Create(@"Peg_Game\solution.txt");
+                using (var io = new StreamWriter("solution.txt"))
+                {
+                    io.WriteLine(movesList);
+                }
                 //You also need to send all of the information regarding the movement to the text box and then erase all the moves from the temp holder            
-                Reset(startEmptyPin++);
+                
             }
             PlayGame();
                   

@@ -9,8 +9,8 @@ namespace Peg_Game
     class Pins
     {
         public int PinNum { get; set; }
+        public bool HasPin{ get; set; }
         public bool Visited { get; set; }
-        public bool Current { get; set; }
         public Pins()
         {
 
