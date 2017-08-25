@@ -104,5 +104,27 @@ namespace Exam3_LinkedList
                 }
             }
         }
+        public void Remove(int data)
+        {
+            if (data == 0)
+            {
+                head = head.Link;
+            }
+            else
+            {
+                int count = 0;
+                Node temp = head;
+                Node prvs = null;
+                while (count != data)
+                {
+                    prvs = temp;
+                    temp = temp.Link;
+                    count++;
+                }
+                Node holder = temp.Link;
+                temp = null;
+                prvs.Link = holder;
+            }
+        }
     }
 }

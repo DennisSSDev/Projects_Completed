@@ -11,6 +11,7 @@ namespace Peg_Game
         public int PinNum { get; set; }
         public bool HasPin{ get; set; }
         public bool Visited { get; set; }
+        public bool Usable { get; set; }
         public Pins()
         {
 

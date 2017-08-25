@@ -14,11 +14,14 @@ namespace Exam3_LinkedList
             list.Add("one");
             list.Add("two");
             list.Add("three");
-            list.Insert(0, "lolz");
-            list.Insert(2, "this is the new third");
-            list.Delete(1);
-            list.Delete(3);
+            //list.Insert(0, "lolz");
+            //list.Insert(2, "this is the new third");
+            //list.Delete(1);
+            //list.Delete(3);
             list.Traverse();
+            list.Remove(2);
+            list.Traverse();
+
 
             Console.WriteLine(list.Total);
             
