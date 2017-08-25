@@ -207,7 +207,7 @@ namespace Peg_Game
                     for (int i = 0; i < item.Value.Count; i++)
                     {
                         temp = (allPins[item.Value[i]].PinNum + item.Key) / 2;
-                        if (allPins[temp].HasPin == false || allPins[item.Value[i]].HasPin == false)
+                        if (allPins[temp].HasPin == false || allPins[item.Value[i]].HasPin == true)
                         {
                             continue;
                         }
