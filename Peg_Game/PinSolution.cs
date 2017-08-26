@@ -192,11 +192,11 @@ namespace Peg_Game
                 turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(),new List<Pins>());//Looks like there could also be the same movedPins keys --> fix
                 turn_to_Unusable_Move[turn_count][movedPins.Peek()].Add(ignorableMoves[movedPins.Peek()][temp]);
             }
-            ignorableMoves[movedPins.Peek()].RemoveAt(temp);//You need to reverse the last move in the index
+            ignorableMoves.Remove(movedPins.Peek());//You need to reverse the last move in the index
             movedPins.Pop();
             removedPinsStack.Pop();
+            turn_count--;//doesn't help the algorithm find the last move for some reason ---> main problem to fix
             removedPins--;
-            turn_count--;
             itirations = 0;
             //go back to the DepthFirstSearch method as you need to check with the turnn_to_Unusable_Move to make sure whether you tried that move already
             //check the ones that are visited
@@ -243,7 +243,6 @@ namespace Peg_Game
                              turn_to_Unusable_Move[turn_count][allPins[item.Key]].Contains(allPins[item.Value[i]]))
                             {
                               found_unusable_move = true;
-                              continue;
                             }
                             
                             if (found_unusable_move)
