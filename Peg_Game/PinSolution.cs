@@ -32,8 +32,8 @@ namespace Peg_Game
 
         Stack<Pins> removedPinsStack = new Stack<Pins>();
         Stack<Pins> movedPins = new Stack<Pins>();
-        Dictionary<Pins, Pins> ignorableMoves = new Dictionary<Pins, Pins>();
-        Dictionary<int, Dictionary<Pins, Pins>> turn_to_Unusable_Move = new Dictionary<int, Dictionary<Pins, Pins>>();
+        Dictionary<Pins, List<Pins>> ignorableMoves = new Dictionary<Pins, List<Pins>>();
+        Dictionary<int, Dictionary<Pins, List<Pins>>> turn_to_Unusable_Move = new Dictionary<int, Dictionary<Pins, List<Pins>>>();
         Dictionary<Pins, Pins> planter = new Dictionary<Pins, Pins>();
 
         private int turn_count = 0;
@@ -44,6 +44,8 @@ namespace Peg_Game
         private bool made_move = false;
         private int itirations = 0;
         public bool SolutionDone { get; set; }
+
+        bool found_unusable_move = false;//make sure to make it false again aftre found
 
         public PinSolution()
         {
@@ -122,16 +124,16 @@ namespace Peg_Game
             memberConnections.Add(2, connections2);
             memberConnections.Add(3, connections3);
             memberConnections.Add(4, connections4);
-            memberConnections.Add(5, connections0);
-            memberConnections.Add(6, connections1);
-            memberConnections.Add(7, connections2);
-            memberConnections.Add(8, connections3);
-            memberConnections.Add(9, connections4);
-            memberConnections.Add(10, connections2);
-            memberConnections.Add(11, connections3);
-            memberConnections.Add(12, connections4);
-            memberConnections.Add(13, connections3);
-            memberConnections.Add(14, connections4);
+            memberConnections.Add(5, connections5);
+            memberConnections.Add(6, connections6);
+            memberConnections.Add(7, connections7);
+            memberConnections.Add(8, connections8);
+            memberConnections.Add(9, connections9);
+            memberConnections.Add(10, connections10);
+            memberConnections.Add(11, connections11);
+            memberConnections.Add(12, connections12);
+            memberConnections.Add(13, connections13);
+            memberConnections.Add(14, connections14);
         }
         private string AddText(string given, int a, int b)
         {
@@ -140,7 +142,10 @@ namespace Peg_Game
         }
         private string RemoveText(string given)
         {
-            return given.Remove(given.Length-12, 12);
+            if (given == null)
+                return given;
+            else
+                return given.Remove(given.Length-15, 12);
         }
 
         private void Reset(int nextEmptyPin)
@@ -154,34 +159,45 @@ namespace Peg_Game
             allPins[nextEmptyPin].HasPin = false;
         }
         private void Reverse()//this method will be called when the solution gets stuck and needs to go back
+            //Rework the ignorable moves so that they interact with the last index in the list
         {
-            RemoveText(movesList);
-            allPins[ignorableMoves[movedPins.Peek()].PinNum].HasPin = false;
+            movesList = RemoveText(movesList);
+            int temp = ignorableMoves[movedPins.Peek()].Count-1;
+            allPins[ignorableMoves[movedPins.Peek()][temp].PinNum].HasPin = false;//need to remove the guy with the last index
             allPins[movedPins.Peek().PinNum].HasPin = true;
             allPins[removedPinsStack.Peek().PinNum].HasPin = true;
-            if (turn_to_Unusable_Move.Values == null)
+            /*if (turn_to_Unusable_Move.Values == null)
             {
-                planter.Add(movedPins.Peek(), ignorableMoves[movedPins.Peek()]);
+                planter.Add(movedPins.Peek(), ignorableMoves[movedPins.Peek()][ignorableMoves.Count-1]);//last index
+                turn_to_Unusable_Move.Add(turn_count, planter);
                 turn_count--;
-                ignorableMoves.Remove(movedPins.Peek());//DO I need to remove the move that was made from the ignorable moves list
+                ignorableMoves[movedPins.Peek()].RemoveAt(temp);//DO I need to remove the move that was made from the ignorable moves list
                 movedPins.Pop();
                 removedPinsStack.Pop();              
                 return;
-            }   
+            }  */ 
             if (turn_to_Unusable_Move.ContainsKey(turn_count))
             {
-                turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(), ignorableMoves[movedPins.Peek()]);
+                if (turn_to_Unusable_Move[turn_count].ContainsKey(movedPins.Peek()))
+                    turn_to_Unusable_Move[turn_count][movedPins.Peek()].Add(ignorableMoves[movedPins.Peek()][temp]);
+                else
+                {
+                    turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(), new List<Pins>());
+                    turn_to_Unusable_Move[turn_count][movedPins.Peek()].Add(ignorableMoves[movedPins.Peek()][temp]);
+                }                //last index
             }
             else
             {
-                turn_to_Unusable_Move.Add(turn_count, new Dictionary<Pins, Pins>());
-                turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(), ignorableMoves[movedPins.Peek()]);
+                turn_to_Unusable_Move.Add(turn_count, new Dictionary<Pins, List<Pins>>());
+                turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(),new List<Pins>());//Looks like there could also be the same movedPins keys --> fix
+                turn_to_Unusable_Move[turn_count][movedPins.Peek()].Add(ignorableMoves[movedPins.Peek()][temp]);
             }
-            ignorableMoves.Remove(movedPins.Peek());//DO I need to remove the move that was made from the ignorable moves list
+            ignorableMoves[movedPins.Peek()].RemoveAt(temp);//You need to reverse the last move in the index
             movedPins.Pop();
             removedPinsStack.Pop();
             removedPins--;
             turn_count--;
+            itirations = 0;
             //go back to the DepthFirstSearch method as you need to check with the turnn_to_Unusable_Move to make sure whether you tried that move already
             //check the ones that are visited
             //check the stack of latest moves(ignorable moves)
@@ -200,23 +216,39 @@ namespace Peg_Game
             while (removedPins != 14)
             {
                 int temp = -1;
+                made_move = false;
+                if (itirations > 14)
+                {
+                    Reverse();//you got stuck trying to solve the problem, and now you need to find a new solution
+                }
                 foreach (var item in memberConnections)
                 {
                     if (allPins[item.Key].HasPin == false)
+                    {
+                        itirations++;
                         continue;
+                    }
                     for (int i = 0; i < item.Value.Count; i++)
                     {
+                        found_unusable_move = false;
                         temp = (allPins[item.Value[i]].PinNum + item.Key) / 2;
                         if (allPins[temp].HasPin == false || allPins[item.Value[i]].HasPin == true)
                         {
                             continue;
                         }
-                        
+
                         if (turn_to_Unusable_Move.ContainsKey(turn_count))
                         {
-                            if(turn_to_Unusable_Move[turn_count].ContainsKey(allPins[item.Key]) && 
-                                turn_to_Unusable_Move[turn_count].ContainsValue(allPins[item.Value[i]]))
+                         if (turn_to_Unusable_Move[turn_count].ContainsKey(allPins[item.Key]) &&
+                             turn_to_Unusable_Move[turn_count][allPins[item.Key]].Contains(allPins[item.Value[i]]))
                             {
+                              found_unusable_move = true;
+                              continue;
+                            }
+                            
+                            if (found_unusable_move)
+                            {
+                                found_unusable_move = false;
                                 continue;
                             }
                         }
@@ -227,8 +259,14 @@ namespace Peg_Game
                         removedPins++;
                         movedPins.Push(allPins[item.Key]);
                         removedPinsStack.Push(allPins[temp]);
-                        ignorableMoves.Add(allPins[item.Key], allPins[item.Value[i]]);
-                        AddText(movesList, allPins[item.Key].PinNum, allPins[item.Value[i]].PinNum);
+                        if (ignorableMoves.ContainsKey(allPins[item.Key]))
+                            ignorableMoves[allPins[item.Key]].Add(allPins[item.Value[i]]);
+                        else
+                        {
+                            ignorableMoves.Add(allPins[item.Key], new List<Pins>());
+                            ignorableMoves[allPins[item.Key]].Add(allPins[item.Value[i]]);//will occur that there could be the same keys --> in that case you need to add the moves to the same key(list most likely)
+                        }
+                        movesList = AddText(movesList, allPins[item.Key].PinNum, allPins[item.Value[i]].PinNum);
                         made_move = true;
                         turn_count++;
                         break;
@@ -240,9 +278,10 @@ namespace Peg_Game
                     {
                         itirations++;
                     }
-                    if (itirations > 14)
+                    else
                     {
-                        Reverse();//you got stuck trying to solve the problem, and now you need to find a new solution
+                        itirations = 0;
+                        break;
                     }
                     
                 }
