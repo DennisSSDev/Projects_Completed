@@ -44,7 +44,7 @@ namespace Peg_Game
         private bool made_move = false;
         private int itirations = 0;
         public bool SolutionDone { get; set; }
-
+        int buff = 0;
         bool found_unusable_move = false;//make sure to make it false again aftre found
 
         public PinSolution()
@@ -140,12 +140,19 @@ namespace Peg_Game
             given += "From " + a + " to " + b + "\r\n";
             return given;
         }
-        private string RemoveText(string given)
+        private string RemoveText(string given, int a, int b)
         {
             if (given == null)
                 return given;
             else
-                return given.Remove(given.Length-15, 12);
+            {
+                if(a >= 10 && b >= 10)
+                    return given.Remove(given.Length - 15,15);
+                else if((a < 10 && b >=10)||(a>=10 && b<10))
+                    return given.Remove(given.Length - 14, 14);
+                else
+                    return given.Remove(given.Length - 13, 13);
+            }
         }
 
         private void Reset(int nextEmptyPin)
@@ -161,7 +168,7 @@ namespace Peg_Game
         private void Reverse()//this method will be called when the solution gets stuck and needs to go back
             //Rework the ignorable moves so that they interact with the last index in the list
         {
-            movesList = RemoveText(movesList);
+            movesList = RemoveText(movesList, movedPins.Peek().PinNum, ignorableMoves[movedPins.Peek()][ignorableMoves[movedPins.Peek()].Count-1].PinNum);
             int temp = ignorableMoves[movedPins.Peek()].Count-1;
             allPins[ignorableMoves[movedPins.Peek()][temp].PinNum].HasPin = false;//need to remove the guy with the last index
             allPins[movedPins.Peek().PinNum].HasPin = true;
@@ -192,7 +199,12 @@ namespace Peg_Game
                 turn_to_Unusable_Move[turn_count].Add(movedPins.Peek(),new List<Pins>());//Looks like there could also be the same movedPins keys --> fix
                 turn_to_Unusable_Move[turn_count][movedPins.Peek()].Add(ignorableMoves[movedPins.Peek()][temp]);
             }
-            ignorableMoves.Remove(movedPins.Peek());//You need to reverse the last move in the index
+            if(ignorableMoves[movedPins.Peek()].Count == 0)
+                ignorableMoves.Remove(movedPins.Peek());
+            else
+                ignorableMoves[movedPins.Peek()].Remove(ignorableMoves[movedPins.Peek()][ignorableMoves[movedPins.Peek()].Count-1]);
+            //You need to reverse the last move in the index
+
             movedPins.Pop();
             removedPinsStack.Pop();
             turn_count--;//doesn't help the algorithm find the last move for some reason ---> main problem to fix
@@ -236,15 +248,15 @@ namespace Peg_Game
                         {
                             continue;
                         }
-
-                        if (turn_to_Unusable_Move.ContainsKey(turn_count))
+                        buff = turn_count + 1;
+                        if (turn_to_Unusable_Move.ContainsKey(buff))
                         {
-                         if (turn_to_Unusable_Move[turn_count].ContainsKey(allPins[item.Key]) &&
-                             turn_to_Unusable_Move[turn_count][allPins[item.Key]].Contains(allPins[item.Value[i]]))
+                         if (turn_to_Unusable_Move[buff].ContainsKey(allPins[item.Key]) &&
+                             turn_to_Unusable_Move[buff][allPins[item.Key]].Contains(allPins[item.Value[i]]))
                             {
                               found_unusable_move = true;
                             }
-                            
+                            buff = -100;
                             if (found_unusable_move)
                             {
                                 found_unusable_move = false;
@@ -268,6 +280,7 @@ namespace Peg_Game
                         movesList = AddText(movesList, allPins[item.Key].PinNum, allPins[item.Value[i]].PinNum);
                         made_move = true;
                         turn_count++;
+                        buff = -100;
                         break;
                             //make sure you exit out of here as soon as this happnes and start the search again
                             //if you get stuck you have 2 stacks that tell you which moves should be ignored (actually if you do revert your moves, create a new  stack of reverted moves to know for sure to not use that specific move again
