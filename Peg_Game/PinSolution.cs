@@ -35,7 +35,7 @@ namespace Peg_Game
         Dictionary<Pins, List<Pins>> ignorableMoves = new Dictionary<Pins, List<Pins>>();
         Dictionary<int, Dictionary<Pins, List<Pins>>> turn_to_Unusable_Move = new Dictionary<int, Dictionary<Pins, List<Pins>>>();
         Dictionary<Pins, Pins> planter = new Dictionary<Pins, Pins>();
-
+        Queue<Dictionary<Pins, Pins>> lastUnallowedMove = new Queue<Dictionary<Pins, Pins>>();
         private int turn_count = 0;
         private int winCount = 0;
         private int removedPins = 1;
@@ -173,6 +173,12 @@ namespace Peg_Game
             allPins[ignorableMoves[movedPins.Peek()][temp].PinNum].HasPin = false;//need to remove the guy with the last index
             allPins[movedPins.Peek().PinNum].HasPin = true;
             allPins[removedPinsStack.Peek().PinNum].HasPin = true;
+            /*
+            lastUnallowedMove.Enqueue(new Dictionary<Pins, Pins>());
+            lastUnallowedMove.Peek().Add(movedPins.Peek(), allPins[ignorableMoves[movedPins.Peek()][temp].PinNum]);
+            *///under construction
+
+            lastUnallowedMove.Dequeue();
             /*if (turn_to_Unusable_Move.Values == null)
             {
                 planter.Add(movedPins.Peek(), ignorableMoves[movedPins.Peek()][ignorableMoves.Count-1]);//last index
@@ -210,6 +216,18 @@ namespace Peg_Game
             turn_count--;//doesn't help the algorithm find the last move for some reason ---> main problem to fix
             removedPins--;
             itirations = 0;
+            if (turn_to_Unusable_Move.ContainsKey(turn_count))
+            {
+                if (turn_to_Unusable_Move[turn_count].ContainsKey(movedPins.Peek()))
+                {
+                    if (turn_to_Unusable_Move[turn_count][movedPins.Peek()].Count > 1)
+                    {
+                        turn_to_Unusable_Move[turn_count][movedPins.Peek()].RemoveAt(0);
+                        if (turn_to_Unusable_Move[turn_count][movedPins.Peek()].Count <= 0)
+                            turn_to_Unusable_Move[turn_count].Remove(movedPins.Peek());
+                    }
+                }
+            }        
             //go back to the DepthFirstSearch method as you need to check with the turnn_to_Unusable_Move to make sure whether you tried that move already
             //check the ones that are visited
             //check the stack of latest moves(ignorable moves)
